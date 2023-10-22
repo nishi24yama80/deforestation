@@ -1,5 +1,6 @@
 pacman::p_load(tidyverse, arrow, reshape2, ggnetwork, network)
 
+# Faostat Forestry data
 forestry_df <- read.csv("data/raw/faostat/Forestry_E_All_Data/Forestry_E_All_Data.csv")
 
 forestry_df <- forestry_df %>% 
@@ -10,11 +11,45 @@ forestry_df <- forestry_df %>%
     element_code = "Element.Code"
   )
 
+colnames(forestry_df) <- tolower(colnames(forestry_df))
+
 forestry_long_df <- forestry_df %>% 
-  select(area_code, area_code_m49, Area, Item, item_code, Element, element_code, names(forestry_df)[nchar(names(forestry_df))==5]) %>% 
+  select(area_code, area_code_m49, area, item, item_code, element, element_code, names(forestry_df)[nchar(names(forestry_df))==5]) %>% 
   pivot_longer(cols = names(forestry_df)[nchar(names(forestry_df))==5],
                names_to = "year",
                values_to = "value") %>% 
-  mutate(year = as.numeric(str_replace(year, "^Y", "")))
+  mutate(year = as.numeric(str_replace(year, "^y", "")))
 
 write_parquet(forestry_long_df, "data/dev/faostat_forestry_long.parquet")
+
+forestry_long_df %>% 
+  filter(area %in% c("Indonesia", "Philippines", "Malaysia") & item == "Roundwood" & element == "Production") %>% 
+  ggplot(data=., aes(x=year, y=value, color=area)) +
+  geom_line()
+
+
+# Faostat faostat trade flows data
+forestry_trade_df <- read.csv("data/raw/faostat/Forestry_Trade_Flows_E_All_Data/Forestry_Trade_Flows_E_All_Data.csv")
+
+forestry_trade_df <- forestry_trade_df %>% 
+  rename(
+    reporter_country = Reporter.Countries,
+    reporter_country_code = Reporter.Country.Code,
+    partner_country = Partner.Countries,
+    partner_country_code = Partner.Country.Code,
+    item_code = Item.Code,
+    element_code = Element.Code
+  )
+
+colnames(forestry_trade_df) <- tolower(colnames(forestry_trade_df))
+
+
+forestry_trade_long_df <- forestry_trade_df %>% 
+  select(reporter_country, reporter_country_code, partner_country, partner_country_code, item, item_code, element, element_code, 
+         names(forestry_trade_df)[nchar(names(forestry_trade_df))==5]) %>% 
+  pivot_longer(cols = names(forestry_trade_df)[nchar(names(forestry_trade_df))==5],
+               names_to = "year",
+               values_to = "value") %>% 
+  mutate(year = as.numeric(str_replace(year, "^y", "")))
+
+write_parquet(forestry_trade_long_df, "data/dev/faostat_forestry_trade_long.parquet")
