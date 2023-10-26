@@ -22,11 +22,6 @@ forestry_long_df <- forestry_df %>%
 
 write_parquet(forestry_long_df, "data/dev/faostat_forestry_long.parquet")
 
-forestry_long_df %>% 
-  filter(area %in% c("Indonesia", "Philippines", "Malaysia") & item == "Roundwood" & element == "Production") %>% 
-  ggplot(data=., aes(x=year, y=value, color=area)) +
-  geom_line()
-
 
 # Faostat faostat trade flows data
 forestry_trade_df <- read.csv("data/raw/faostat/Forestry_Trade_Flows_E_All_Data/Forestry_Trade_Flows_E_All_Data.csv")

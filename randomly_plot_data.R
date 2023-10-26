@@ -37,4 +37,50 @@ forestry_df %>%
   geom_line() +
   facet_wrap(facets = ~element, scales="free_y")
 
-trade_net <- 
+forestry_df %>% 
+  filter(area == "World" & item == "Roundwood") %>% 
+  ggplot(data = ., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facets = ~element, scales="free_y")
+
+forestry_df %>% 
+  filter(area == "World" & year == 2010) %>% 
+  ggplot(data=., aes(x=value)) +
+  geom_histogram()
+
+forestry_df %>% 
+  filter(year == 2020& item == "Roundwood" & element == "Export Quantity") %>% 
+  arrange(desc(value)) %>% 
+  View()
+
+forestry_df %>% 
+  filter(year == 2021 & item == "Forest products (export/import)" & element == "Export Value") %>% 
+  arrange(desc(value)) %>% 
+  View()
+
+forestry_df %>% 
+  filter(year == 2021 & area == "World" & element == "Export Value") %>% 
+  arrange(desc(value)) %>% 
+  View()
+
+areas <- unique(forestry_df$area)
+item_name <- "Roundwood"
+
+for (area_name in areas) {
+  tryCatch({
+    p <- forestry_df %>% 
+      filter(area == area_name & item == item_name) %>% 
+      ggplot(data = ., aes(x=year, y=value)) +
+      geom_line() +
+      facet_wrap(facets = ~element, scales="free_y") +
+      labs(title=area_name, subtitle = item_name)
+    ggsave(filename = paste0("fig/", item_name, "/", area_name, ".png"), plot = p)
+    print(area_name) 
+  }, error = function(e) {
+    print(area_name) 
+    print("error")
+  }
+  )
+}
+
+# network
