@@ -19,6 +19,8 @@ trade_df2 <-
   left_join(gdp_df2, by=c("ISO3.Code.x"="Code", "year"="Year")) %>% 
   left_join(gdp_df2, by=c("ISO3.Code.y"="Code", "year"="Year")) 
 
+write_parquet(trade_df2, "data/dev/trade_gdp_dist.parquet")
+
 trade_df2 %>% 
   filter(year==2015, element=="Export Quantity") %>% 
   ggplot(data=., aes(x=seadistance, y=value)) +
@@ -67,4 +69,4 @@ for (i in 1:length(items)) {
 msummary(lm_list, stars = TRUE, fmt="%.2e", output="latex", gof_map = "nobs")
 dist_results <- msummary(lm_list, stars = TRUE, fmt="%.2e", output="data.frame", gof_map = "nobs")
 
-dist_results
+write.csv(dist_results, "data/dev/reg_expval_dist.csv")

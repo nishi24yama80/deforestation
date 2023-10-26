@@ -1,7 +1,60 @@
 pacman::p_load(tidyverse, arrow, reshape2, ggnetwork, network)
 
-forestry_df <- read_parquet("data/dev/faostat_forestry_long.parquet")
+forestry_df <- read_parquet("data/dev/faostat_forestry_trade_long2.parquet")
 trade_df <- read_parquet("data/dev/faostat_forestry_trade_long.parquet")
+
+# all
+forestry_df %>% 
+  filter(area == "World") %>% 
+  ggplot(data=., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  facet_wrap(facets=~element, ncol = 2, scales = "free")
+ggsave(file="../fig/world_time_item_all.png", width=20, height=20, dpi=300)
+
+forestry_df %>% 
+  filter(area == "World" & str_detect(item, "roundwood")) %>% 
+  ggplot(data=., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  facet_wrap(facets=~element, ncol = 2, scales = "free")
+ggsave(file="../fig/world_time_item_roundwood.png", width=20, height=20, dpi=300)
+
+forestry_df %>% 
+  select(area, year, item, element, value) %>% 
+  filter(area == "World" & str_detect(item, "roundwood")) %>% 
+  pivot_wider(names_from = element, values_from = value) %>% 
+  rename(
+    export_value = "Export Value",
+    import_value = "Import Value",
+    export_q = "Export Quantity",
+    import_q = "Import Quantity"
+  ) %>% 
+  ggplot(data=., aes(x=export_value, y=import_value)) + 
+  geom_point() +
+  geom_abline(intercept = 0, slope=1, color="blue", alpha = 0.4) +
+  geom_smooth(method = "lm") +
+  expand_limits(x = 0, y = 0) 
+  
+
+forestry_df %>% 
+  filter(area == "World" & year == 2020 & element == "Production") %>% 
+  arrange(desc(value)) %>% 
+  View()
+
+forestry_df %>% 
+  filter(area == "World" & year == 2020 & element == "Import Value") %>% 
+  arrange(desc(value)) %>% 
+  View()
+
+trade_df %>% 
+  distinct(item) %>% 
+  View()
+
+trade_df %>%
+  filter(element == "Export Quantity") %>% 
+  group_by(item) %>% 
+  summarize(value = sum(value, na.rm = TRUE)) %>% 
+  arrange(desc(value)) %>% 
+  View()
 
 forestry_df %>% 
   filter(area %in% c("Indonesia", "Philippines", "Malaysia") & item == "Roundwood" & element == "Export Quantity") %>% 
