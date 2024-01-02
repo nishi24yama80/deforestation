@@ -1,0 +1,49 @@
+\documentclass[a4paper,12pt]{article}
+
+
+\usepackage{amssymb,amsmath,amsfonts,eurosym,geometry,ulem,caption,color,setspace,sectsty,comment,caption,pdflscape,subfigure,array,hyperref, here}
+
+
+\usepackage{bm}
+% figure
+\usepackage[dvipdfmx]{graphicx}
+%\usepackage{bmpsize}
+
+\usepackage{booktabs}
+\usepackage{siunitx}
+\newcolumntype{d}{S[
+    input-open-uncertainty=,
+    input-close-uncertainty=,
+    parse-numbers = false,
+    table-align-text-pre=false,
+    table-align-text-post=false
+ ]}
+
+
+\usepackage[bottom]{footmisc}
+
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+\begin{document}
+
+\title{Oasis or Mirage? \\ Trade Network Propagation of Deforestation}
+\author{Tomoki Nishiyama\footnote{Department of Economics, the University of Tokyo. \\ e-mail address: nishiyama-tomoki@g.ecc.u-tokyo.ac.jp \\ I thank Yasuyuki Sawada (an advisor of this thesis), Michihiro Kandori, and all the participants of their seminar for helpful discussion. I am also grateful to Shotaro Beppu, Yutao Chen, and Yuto Iwamoto for meaningful comments and supports.}}
+\date{January 2024}
+\maketitle
+
+\begin{abstract}
+    Log production is destroying forests around the world and contributing to global warming. To address deforestation, various countries have begun to adopt policies to restrict log exports. However, even if one country restricts log exports, the countries that have been importing logs may increase their log production to compensate for their previous imports. It is also possible that other countries will increase their log exports to the log consuming countries. In this case, one country's log export restrictions could induce deforestation in other countries through trade networks. In this paper, we focus on two policies, Russia's log export restrictions in 2007 and Myanmar's log export ban in 2014, to demonstrate how these policies affect the log industry in other countries through trade networks. We find that when one country restricts log exports, log production increases in their previously main export destination. This result suggests that through a network of trade, one country's pro-environmental policies can cause environmental damage in other countries.
+\end{abstract}
+
+\textit{
+    A king is wandering in the desert. There used to be a forest in this desert. However, due to the mass production of logs, the former forest has been lost and has become a desert. The once cool forest is now a scorching desert with no water to be found no matter how far one walks. The king, who is about to collapse, finds something like water in the distance. The king says, "There is an oasis spreading out over there. There must be water. There must be trees. We can regenerate the forest from there." And he starts running. But, is that water really an oasis? Is it not a mirage?
+}
+\section{Introduction}
+To be added. \cite{acemoglu2012network} says so.
+
+The remainder of this paper is organized as follows. Section 2 provides an overview of two trade restriction policies (Russia in 2007 and Myanmar in 2014) and explains how these policies are exogeneous shocks for other countries. Section 3 describes how I construct trade network flow data for forest products, and Section 4 presents a sketch of the network data to give an overall picture of the trade network. Based on some basic facts explained in Section 4, Section 5 presents a simple model for constructing hypotheses on how one country’s policy affects other countries. Section 6 describes the identification strategy for empirically testing the theoretical hypothesis. Section 7 presents the empirical results and Section 8 discusses their interpretation. Finally, Section 9 presents the conclusions. Extensions of the theoretical model and robustness checks of the empirical results are in the appendix.\\
+
+\bibliography{deforestation_reference}
+
+\end{document}
