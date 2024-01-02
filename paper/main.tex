@@ -28,7 +28,7 @@
 \begin{document}
 
 \title{Oasis or Mirage? \\ Trade Network Propagation of Deforestation}
-\author{Tomoki Nishiyama\footnote{Department of Economics, the University of Tokyo. \\ e-mail address: nishiyama-tomoki@g.ecc.u-tokyo.ac.jp \\ I thank Yasuyuki Sawada (an advisor of this thesis), Michihiro Kandori, and all the participants of their seminar for helpful discussion. I am also grateful to Shotaro Beppu, Yutao Chen, and Yuto Iwamoto for meaningful comments and supports.}}
+\author{Tomoki Nishiyama\footnote{Department of Economics, the University of Tokyo. \\ e-mail address: nishiyama-tomoki@g.ecc.u-tokyo.ac.jp \\ I thank Yasuyuki Sawada (a main advisory professor of this thesis), Michihiro Kandori, and all the participants of their seminar for helpful discussion. I am also grateful to Shotaro Beppu, Yutao Chen, and Yuto Iwamoto for meaningful comments and supports.}}
 \date{January 2024}
 \maketitle
 
@@ -65,6 +65,112 @@ The remainder of this paper is organized as follows. Section 2 provides an overv
 \section{Trade Flow Data}
 
 \section{Sketch of the Trade Network of Logs}
+
+
+\begin{table}[htbp]
+    \caption{Production of Forestry Goods and Usage of Logs}
+    \centering
+    \begin{tabular}{lcccc}
+       \tabularnewline \midrule \midrule
+       Dependent Variables:     & sawn                    & plywood                     & pulp                    & chip\\  
+       Model:                   & (1)                     & (2)                         & (3)                     & (4)\\  
+       \midrule
+       \emph{Variables}\\
+       conif\_domestic          & 0.2160$^{***}$          & 0.0567                      & 0.0378                  & -0.0339\\   
+                                & (0.0651)                & (0.0514)                    & (0.0379)                & (0.2233)\\   
+       conif\_imp               & 1.659$^{**}$            & 0.7917$^{**}$               & 0.3218$^{**}$           & 1.039$^{*}$\\   
+                                & (0.6541)                & (0.3536)                    & (0.1473)                & (0.5378)\\   
+       nonconif\_domestic       & -0.0033                 & -0.0903                     & 0.0080                  & 0.1929\\   
+                                & (0.0879)                & (0.0607)                    & (0.0482)                & (0.1786)\\   
+       nonconif\_trop\_imp      & 0.5227                  & 1.208                       & -0.3307                 & 2.094$^{*}$\\   
+                                & (2.061)                 & (1.079)                     & (0.3494)                & (1.216)\\   
+       nonconif\_nontrop\_imp   & -0.2427                 & -0.2589                     & 0.2553$^{**}$           & 0.7318\\   
+                                & (0.6352)                & (0.2551)                    & (0.1219)                & (0.9474)\\   
+       lag1\_gdp                & $2.46\times 10^{-6}$    & $1.86\times 10^{-6}$$^{*}$  & $2.83\times 10^{-7}$    & $-1.06\times 10^{-7}$\\    
+                                & ($1.95\times 10^{-6}$)  & ($1.06\times 10^{-6}$)      & ($5.22\times 10^{-7}$)  & ($1.79\times 10^{-6}$)\\    
+       \midrule
+       \emph{Fixed-effects}\\
+       area                     & Yes                     & Yes                         & Yes                     & Yes\\  
+       as.factor(year)          & Yes                     & Yes                         & Yes                     & Yes\\  
+       \midrule
+       \emph{Fit statistics}\\
+       Observations             & 2,812                   & 2,812                       & 1,869                   & 1,759\\  
+       R$^2$                    & 0.97680                 & 0.96827                     & 0.98507                 & 0.86730\\  
+       Within R$^2$             & 0.73537                 & 0.72402                     & 0.33070                 & 0.21385\\  
+       \midrule \midrule
+       \multicolumn{5}{l}{\emph{Clustered (area) standard-errors in parentheses}}\\
+       \multicolumn{5}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+    \end{tabular}
+ \end{table}
+
+\textit{\textbf{Fact2:} Intensive margin (average value of export / import) accounts for more than half of the variation of countries' export and import}.
+\begin{table}[H]
+    \centering
+    \caption{Cross-sectional Decomposition of Countries' Log Export Value}
+    \begin{tabular}[t]{lcccccc}
+    \toprule
+    \textit{log type:} &  \multicolumn{2}{c}{Coniferous}&  \multicolumn{2}{c}{Non-conif Non-tropical}&  \multicolumn{2}{c}{Non-conif tropical}\\
+    \midrule
+      & (1) & (2) & (3) & (4) & (5) & (6)\\
+      \textit{Dependent Var:}& Links & Average & Links & Average & Links & Average \\
+    \midrule
+    log(Export Value)  & \num{0.390}*** & \num{0.610}*** & \num{0.412}*** & \num{0.588}*** & \num{0.379}*** & \num{0.621}***\\
+    & (\num{0.010}) & (\num{0.010}) & (\num{0.010}) & (\num{0.010}) & (\num{0.013}) & (\num{0.013})\\
+   \midrule
+   Num.Obs. & \num{95} & \num{95} & \num{120} & \num{120} & \num{102} & \num{102}\\
+   R2 & \num{0.899} & \num{0.956} & \num{0.919} & \num{0.959} & \num{0.894} & \num{0.957}\\
+   \bottomrule
+   \multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+   \end{tabular}
+   \end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Cross-sectional Decomposition of Countries' Log Import Value}
+    \begin{tabular}[t]{lcccccc}
+    \toprule
+    \textit{log type:} &  \multicolumn{2}{c}{Coniferous}&  \multicolumn{2}{c}{Non-conif Non-tropical}&  \multicolumn{2}{c}{Non-conif tropical}\\
+    \midrule
+      & (1) & (2) & (3) & (4) & (5) & (6)\\
+      \textit{Dependent Var:}& Links & Average & Links & Average & Links & Average \\
+    \midrule
+    log(Import Value) & \num{0.389}*** & \num{0.611}*** & \num{0.437}*** & \num{0.563}*** & \num{0.479}*** & \num{0.521}***\\
+    & (\num{0.008}) & (\num{0.008}) & (\num{0.009}) & (\num{0.009}) & (\num{0.017}) & (\num{0.017})\\
+   \midrule
+   Num.Obs. & \num{141} & \num{141} & \num{136} & \num{136} & \num{80} & \num{80}\\
+   R2 & \num{0.916} & \num{0.964} & \num{0.923} & \num{0.952} & \num{0.882} & \num{0.899}\\
+   \bottomrule
+   \multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
+   \end{tabular}
+   \end{table}
+
+   \begin{table}[H]
+    \caption{Cross-sectional Gravity Equation of Log Export Value}
+    \centering
+    \begin{tabular}{lccc}
+       \tabularnewline \midrule \midrule
+       Dependent Variable: & \multicolumn{3}{c}{log(Export Value)}\\
+       \midrule
+       \textit{log type: } & Coniferous & Non-conif Non-tropical & Non-conif Tropical\\
+       Model:                             & (1)            & (2)            & (3)\\  
+       \midrule
+       \emph{Variables}\\
+       log(distw)                         & -1.916$^{***}$ & -1.226$^{***}$ & -0.6735$^{***}$\\   
+       & (0.1864)       & (0.1215)       & (0.0907)\\   
+        \midrule
+        \emph{Fixed-effects}\\
+        year-exporter  & Yes            & Yes            & Yes\\  
+        year-importer   & Yes            & Yes            & Yes\\  
+        \midrule
+        \emph{Fit statistics}\\
+        Observations                       & 17,124         & 22,695         & 9,494\\  
+        R$^2$                              & 0.51745        & 0.47173        & 0.60015\\  
+        Within R$^2$                       & 0.21867        & 0.15971        & 0.06400\\  
+        \midrule \midrule
+        \multicolumn{4}{l}{\emph{Clustered (exporter country and importer country) standard-errors in parentheses}}\\
+        \multicolumn{4}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
+    \end{tabular}
+ \end{table}
 
 \section{A Model of Deforestation Propagation}
 
