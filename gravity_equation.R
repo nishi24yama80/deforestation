@@ -134,3 +134,108 @@ for (item_name in item_list) {
   ggsave(file = file_name, plot = p)
   print(item_name)
 }
+
+####Roundwood####
+trade_df %>% 
+  filter(grepl("roundwood", item) & element == "Export Value") %>% 
+  mutate(
+    roundwood_type = case_when(
+      item == "Industrial roundwood, coniferous (export/import)" ~ "coniferous",
+      item == "Industrial roundwood, non-coniferous non-tropical (export/import)" ~ "non-coniferous non-tropical",
+      item == "Industrial roundwood, non-coniferous tropical (export/import)" ~ "non-coniferous tropical"
+    )
+      ) %>% 
+  group_by(roundwood_type, year) %>% 
+  summarize(sum_export = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = sum_export, color = roundwood_type)) +
+  geom_line() +
+  ylim(0, 10000000) +
+  labs(x = "Year", y = "Total Export Value", title = "Export Value of Roundwood")
+  
+trade_df %>% 
+  filter(grepl("roundwood", item) & element == "Export Quantity") %>% 
+  mutate(
+    roundwood_type = case_when(
+      item == "Industrial roundwood, coniferous (export/import)" ~ "coniferous",
+      item == "Industrial roundwood, non-coniferous non-tropical (export/import)" ~ "non-coniferous non-tropical",
+      item == "Industrial roundwood, non-coniferous tropical (export/import)" ~ "non-coniferous tropical"
+    )
+  ) %>% 
+  group_by(roundwood_type, year) %>% 
+  summarize(sum_export = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = sum_export, color = roundwood_type)) +
+  geom_line() +
+  labs(x = "Year", y = "Total Export Quantity", title = "Export Quantity of Roundwood")
+
+country_list <- trade_df %>% 
+  filter(item == "Industrial roundwood, non-coniferous non-tropical (export/import)" & element == "Export Quantity") %>% 
+  filter(year == 2004) %>% 
+  arrange(desc(value)) %>%
+  slice(1:10) %>% 
+  select(reporter_country) %>% 
+  pull()
+
+trade_df %>% 
+  filter(item == "Industrial roundwood, non-coniferous non-tropical (export/import)" & element == "Export Quantity") %>% 
+  filter(reporter_country %in% c("Australia", "New Zealand")) %>% 
+  group_by(reporter_country, year) %>% 
+  summarize(sum_export = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = sum_export, color = reporter_country)) +
+  geom_line() +
+  labs(x = "Year", y = "Total Export Quantity", title = "Export Quantity of Roundwood")
+
+####Trade Cost####
+
+trade_df2 <- trade_df %>% 
+  filter(grepl("roundwood", item) & element %in% c("Export Value", "Export Quantity", "Import Value", "Import Quantity")) %>% 
+  mutate(element2 = case_when(
+    element == "Export Value" ~ "exp_val",
+    element == "Export Quantity" ~ "exp_quant",
+    element == "Import Value" ~ "imp_val",
+    element == "Import Quantity" ~ "imp_quant"
+  )) %>% 
+  select(reporter_country, partner_country, year, item, element2, value) %>% 
+  group_by(reporter_country, partner_country, year, item) %>% 
+  pivot_wider(names_from = element2, values_from = value) %>% 
+  mutate(
+    exp_price = exp_val / exp_quant,
+    imp_price = imp_val / imp_quant
+  )
+
+trade_df2 %>% 
+  filter(reporter_country == "China") %>% 
+  group_by(year, item) %>% 
+  summarize(imp_total_val = mean(imp_val, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = imp_total_val, color = item)) +
+  geom_line()
+
+trade_df2 %>% 
+  filter(reporter_country == "China") %>% 
+  group_by(year, item) %>% 
+  summarize(imp_avg_price = mean(imp_price, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = imp_avg_price, color = item)) +
+  geom_line()
+
+trade_df2 %>% 
+  filter(year == 2018) %>% 
+  ggplot(data = ., aes(x = exp_price)) +
+  geom_histogram() +
+  facet_wrap(facets = ~item)
+
+
+trade_df2 %>% 
+  filter(year == 2018) %>% 
+  group_by(reporter_country) +
+  summarize(value = sum(exp_val, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(facets = ~item)
+
+trade_df2 %>% 
+  filter(year == 2018) %>% 
+  ggplot(data = ., aes(x = imp_val, y = exp_val)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "loess")+
+  facet_wrap(facets = ~item) +
+  xlim(0, 50000) +
+  ylim(0, 50000)
