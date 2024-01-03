@@ -30,7 +30,108 @@ forest_item_list <- forest_df %>%
   distinct(item) %>% 
   pull()
 
-####Decomposition####
+####Num of Links####
+
+item_vec <- c("Industrial roundwood, coniferous (export/import)", "Industrial roundwood, non-coniferous non-tropical (export/import)", "Industrial roundwood, non-coniferous tropical (export/import)")
+
+nlinks_imp <- trade_df %>% 
+  filter(item %in% item_vec & element == "Import Quantity" & year == 2018) %>% 
+  group_by(reporter_country, item) %>% 
+  summarize(num_of_links = sum(!is.na(value))) %>% 
+  ungroup() %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "Coniferous",
+      item == item_vec[2] ~ "Non-coniferous Non-tropical",
+      item == item_vec[3] ~ "Non-coniferous Tropical"
+    )
+  ) %>% 
+  ggplot(data = ., aes(x = num_of_links)) +
+  geom_histogram(binwidth = 1) +
+  facet_wrap(facets = ~item, ncol = 1) +
+  xlim(-1, 100) +
+  ylim(0, 90) +
+  labs(x = "Number of Links", y = "Count") +
+  theme_minimal() +                                                             
+  theme(strip.text.x = element_text(size = 15))
+
+ggsave(filename = "fig/num_links/num_links_imp.png", width = 10, height = 8, dpi = 150,  plot = nlinks_imp)
+
+trade_df %>% 
+  filter(item %in% item_vec & element == "Export Quantity" & year == 2018) %>% 
+  group_by(reporter_country, item) %>% 
+  summarize(num_of_links = sum(!is.na(value))) %>% 
+  ungroup() %>% 
+  group_by(item) %>% 
+  summarize(n())
+nlinks_exp <- trade_df %>% 
+  filter(item %in% item_vec & element == "Export Quantity" & year == 2018) %>% 
+  group_by(reporter_country, item) %>% 
+  summarize(num_of_links = sum(!is.na(value))) %>% 
+  ungroup() %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "Coniferous",
+      item == item_vec[2] ~ "Non-coniferous Non-tropical",
+      item == item_vec[3] ~ "Non-coniferous Tropical"
+    )
+  ) %>% 
+  ggplot(data = ., aes(x = num_of_links)) +
+  geom_histogram(binwidth = 1) +
+  facet_wrap(facets = ~item, ncol = 1) +
+  xlim(-1, 100) +
+  ylim(0, 90) +
+  labs(x = "Number of Links", y = "Count") +
+  theme_minimal() +                                                                
+  theme(strip.text.x = element_text(size = 15))
+
+ggsave(filename = "fig/num_links/num_links_exp.png", width = 10, height = 8, dpi = 150,  plot = nlinks_exp)
+
+####Decomposition Price vs Quantity####
+item_vec <- c("Industrial roundwood, coniferous (export/import)", "Industrial roundwood, non-coniferous non-tropical (export/import)", "Industrial roundwood, non-coniferous tropical (export/import)")
+item_name <- "Industrial roundwood, coniferous (export/import)"
+
+decomposition_df <- trade_df %>% 
+  filter(reporter_country == "Australia" & item %in% item_vec & element %in% c("Import Value", "Import Quantity")) %>% 
+  filter(year == 2018) %>% 
+  group_by(partner_country, item, element) %>% 
+  summarize(total = sum(value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(element2 = case_when(
+    element == "Import Value" ~ "imp_val",
+    element == "Import Quantity" ~ "imp_quant"
+  )) %>% 
+  select(partner_country, item, element2, total) %>% 
+  group_by(item) %>% 
+  pivot_wider(names_from = element2, values_from = total) %>%
+  filter(imp_quant > 0) %>% 
+  mutate(imp_price = imp_val / imp_quant) 
+
+lm_decomp_1 <- lm_robust(log(imp_price) ~ 0 + log(imp_val), data = decomposition_df %>% filter(item == item_vec[3]))
+lm_decomp_2 <- lm_robust(log(imp_quant) ~ 0 + log(imp_val), data = decomposition_df %>% filter(item == item_vec[3]))
+all_regs <- list(lm_decomp_1, lm_decomp_2)
+modelsummary(all_regs, gof_map = c("nobs", "r.squared"), stars = c('*' = .1, '**' = .05, '***' = .01))
+
+
+
+forest_df %>% 
+  filter(element == "Import Value" & year == 2018 & item == item_vec[3]) %>% 
+  arrange(desc(value)) %>% 
+  select(area, value) %>% 
+  View()
+
+lm_decomp_2 <- lm(log(imp_quant) ~ 0 + log(imp_val), data = decomposition_df %>% filter(item == item_vec[2]))
+summary(lm_decomp_2)
+
+decomposition_df %>% 
+  filter(item == item_vec[2]) %>% 
+  mutate(
+    a = log(imp_quant),
+    b = log(imp_val)
+  ) %>% 
+  lm(b ~ 0 + a, data = .)
+
+####Decomposition Links vs Value####
 decompose_var <- function(item_name, element_name) {
   decomposition_df <- trade_df %>% 
     filter(item == item_name & element == element_name) %>% 
