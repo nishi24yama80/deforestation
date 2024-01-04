@@ -107,7 +107,7 @@ Panel A shows that Myanmar's export ban in 2014 did not have much impact on the 
 \end{figure}
 
 \section{Sketch of the Trade Network of Logs}
-This section provides descriptive statistics to convey whole picture of the trade network data. First, I show cross-sectional summary statistics of roundwoods in 2018 with Table \ref{tab:summary_stat}.
+This section provides descriptive statistics to convey whole picture of the trade network data. First, I show cross-sectional summary statistics of roundwoods in 2018 with Table \ref{tab:summary_stat}. The summary statistics of roundwood export / import prices are presented in Table \ref{tab:summary_stat_price} in the Appendix. Based on these summary statistics, I presents several facts which describe the trade networks.\\
 
 \begin{table}[htbp]
     \caption{Cross-sectional Summary Statistics on Roundwood in 2018}
@@ -169,46 +169,61 @@ Non-coniferous Tropical & 167 & 3.305 & 7.181 & 0 & 0 & 64\\
  \end{table}
 
 
+\textit{\textbf{Fact 1:} Most of the roundwood production are supplied to the domestic market.} \\
+Table \ref{tab:summary_stat} shows that around 10\% of the roundwood production are used for international trade and the rest 90\% are consumed in the domestic market. Figure \ref{tab:summary_stat_price} shows the long term trend of production and export of roundwoods. In any period, around 90 \% of the production is consumed in the domestic market\footnote{There is a jump in the export quantity of non-coniferous non-tropical roundwood in 2004. This might be due to errors of the original FAOSTAT dataset.}.
+
+\begin{figure}[htbp]
+    \centering
+    \caption{Roundwood World Production and Export}
+    \subfigure[][Production Quantity $(m^3)$]{\centering \includegraphics*[bb=0 0 1000 1000, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/summary_stat/production.png"}}
+    \subfigure[][Export Quantity $(m^3)$]{\centering \includegraphics*[bb=0 0 1000 1000, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/summary_stat/exp_quant.png"}}
+    \caption*{\small{The left panel is a time-series plot of total production and the right is that of total export.}}
+    \label{fig:time_series_prod_exp}
+\end{figure}
+
+\textit{\textbf{Fact 2:} Roundwood is used as intermediate inputs of forestry products.} \\
+Roundwood is used as intermediate input goods of various forestry product, such as sawn wood, plywood, pulp, and wood chip. Table \ref{tab:intermediate_input} shows relationship between quantity of forestry products made in each country and quantity of roundwood produced for domestic market and roundwood imported from foreign suppliers. As a control, I include lagged GDP on the right-hand side. There are positive relationship between quantity of roundwoods and quantity of forestry products. This result is consistent with the fact that roundwoods are used as intermediate inputs of forestry products.
 
 \begin{table}[htbp]
     \caption{Production of Forestry Goods and Usage of Logs}
     \centering
     \begin{tabular}{lcccc}
        \tabularnewline \midrule \midrule
-       Dependent Variables:     & sawn                    & plywood                     & pulp                    & chip\\  
+       Dependent Variables:     & Sawn wood                    & Plywood                     & Pulp                    & Wood Chip\\  
        Model:                   & (1)                     & (2)                         & (3)                     & (4)\\  
        \midrule
        \emph{Variables}\\
-       conif\_domestic          & 0.2160$^{***}$          & 0.0567                      & 0.0378                  & -0.0339\\   
+       Conif Domestic          & 0.2160$^{***}$          & 0.0567                      & 0.0378                  & -0.0339\\   
                                 & (0.0651)                & (0.0514)                    & (0.0379)                & (0.2233)\\   
-       conif\_imp               & 1.659$^{**}$            & 0.7917$^{**}$               & 0.3218$^{**}$           & 1.039$^{*}$\\   
+       Conif Imp               & 1.659$^{**}$            & 0.7917$^{**}$               & 0.3218$^{**}$           & 1.039$^{*}$\\   
                                 & (0.6541)                & (0.3536)                    & (0.1473)                & (0.5378)\\   
-       nonconif\_domestic       & -0.0033                 & -0.0903                     & 0.0080                  & 0.1929\\   
+       Non-conif Domestic       & -0.0033                 & -0.0903                     & 0.0080                  & 0.1929\\   
                                 & (0.0879)                & (0.0607)                    & (0.0482)                & (0.1786)\\   
-       nonconif\_trop\_imp      & 0.5227                  & 1.208                       & -0.3307                 & 2.094$^{*}$\\   
-                                & (2.061)                 & (1.079)                     & (0.3494)                & (1.216)\\   
-       nonconif\_nontrop\_imp   & -0.2427                 & -0.2589                     & 0.2553$^{**}$           & 0.7318\\   
-                                & (0.6352)                & (0.2551)                    & (0.1219)                & (0.9474)\\   
-       lag1\_gdp                & $2.46\times 10^{-6}$    & $1.86\times 10^{-6}$$^{*}$  & $2.83\times 10^{-7}$    & $-1.06\times 10^{-7}$\\    
+     Non-conif Non-trop Imp   & -0.2427                 & -0.2589                     & 0.2553$^{**}$           & 0.7318\\   
+                                & (0.6352)                & (0.2551)                    & (0.1219)                & (0.9474)\\  
+       Non-conif Trop Imp      & 0.5227                  & 1.208                       & -0.3307                 & 2.094$^{*}$\\   
+                                & (2.061)                 & (1.079)                     & (0.3494)                & (1.216)\\    
+       Lagged GDP                & $2.46\times 10^{-6}$    & $1.86\times 10^{-6}$$^{*}$  & $2.83\times 10^{-7}$    & $-1.06\times 10^{-7}$\\    
                                 & ($1.95\times 10^{-6}$)  & ($1.06\times 10^{-6}$)      & ($5.22\times 10^{-7}$)  & ($1.79\times 10^{-6}$)\\    
        \midrule
        \emph{Fixed-effects}\\
-       area                     & Yes                     & Yes                         & Yes                     & Yes\\  
-       as.factor(year)          & Yes                     & Yes                         & Yes                     & Yes\\  
+       Country                     & Yes                     & Yes                         & Yes                     & Yes\\  
+       Year          & Yes                     & Yes                         & Yes                     & Yes\\  
        \midrule
        \emph{Fit statistics}\\
        Observations             & 2,812                   & 2,812                       & 1,869                   & 1,759\\  
        R$^2$                    & 0.97680                 & 0.96827                     & 0.98507                 & 0.86730\\  
        Within R$^2$             & 0.73537                 & 0.72402                     & 0.33070                 & 0.21385\\  
        \midrule \midrule
-       \multicolumn{5}{l}{\emph{Clustered (area) standard-errors in parentheses}}\\
-       \multicolumn{5}{l}{\emph{Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}\\
     \end{tabular}
+    \caption*{\small{Conif : coniferous, Trop: tropical, Imp : import quantity.Clustered (area) standard-errors are reported in parentheses. Signif. Codes: ***: 0.01, **: 0.05, *: 0.1}}
+    \label{tab:intermediate_input}
  \end{table}
 
-\textit{\textbf{Fact2:} Intensive margin (average value of export / import) accounts for more than half of the variation of countries' export and import}.
+ \textit{\textbf{Fact3:} The distribution of active export / import links (links with positive export / import quantity) is right-skewed.}\\
+ I construct bipartite graph consisted of around 160 importer countries and 160 exporter countries. However, not all the links between potential importer countries and exporter countries are not active. In other words, some countries do not export roundwood at all to some other countries. To examine the number of active links of roundwood trade, I present histograms in Figure \ref{fig:num_of_trade_links}. First, in both export and import of any roundwood, the distribution has a long tail on the right side. In addition, the number of countries with zero links are larger in exports than in imports. This is consistent with the uneven distribution of forest resources over countries due to different climate or areas.
 
-\begin{figure}[H]
+ \begin{figure}[H]
     \centering
     \caption{Number of Roundwood Trade Links in 2018}
     \subfigure[][Export Links]{\centering \includegraphics*[bb=0 0 1000 1000, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/num_links/num_links_exp.png"}}
@@ -217,7 +232,22 @@ Non-coniferous Tropical & 167 & 3.305 & 7.181 & 0 & 0 & 64\\
     \label{fig:num_of_trade_links}
 \end{figure}
 
-\begin{table}[H]
+\textit{\textbf{Fact4:} Intensive margin (average value of export / import per one active link) accounts for more than half of the variation of countries' export and import}.\\
+Table \ref{tab:summary_stat} suggests that there is a large variation of export value and import value among countries. Since the value is a product of unit average price and quantity, we can decompose the variation of export and import value into variation of unit average price and variation of quantity. By following decomposition method proposed by \cite{bernard2009margins}, we decompose the variation by the following process:
+
+\begin{align}
+    \intertext{Since the total value of export (import) $y_i$ is a product of number of active links of export (import) $q_i$ and average export (import) value per link $\Bar{p}_i = y_i / q_i$, namely,}
+    y_i = q_i \times \Bar{p}_i
+    \intertext{By taking log, we get additive equation:}
+    \log y_i = \log q_i + \log \Bar{p}_i
+    \intertext{Thus, we can decompose the variation of $y_i$ to variation of $q_i$ and $\Bar{p}_i$ with the following cross-sectional regressions (\cite{bernard2009margins}),}
+    \log q_i = \beta_1 \log y_i + \varepsilon_i \\
+    \log \Bar{p}_i = \beta_2 \log y_i + \varphi_i \\
+\end{align}
+
+The results of this decomposition in 2018 are displayed in Table \ref{tab:decomp_exp} and \ref{tab:decomp_imp}. ``Links'' indicates a esimate of $\beta_1$ and ``Average'' indicates a estimate of $\beta_2$. These results suggest that around $50 \sim 60$ \% of the variation of the export (import) value is explained by the variation of average export (import) value per link. In other words, more than half of the variation of the export (import) comes from variation of the intensive margin.
+
+\begin{table}[htbp]
     \centering
     \caption{Cross-sectional Decomposition of Countries' Log Export Value}
     \begin{tabular}[t]{lcccccc}
@@ -235,9 +265,10 @@ Non-coniferous Tropical & 167 & 3.305 & 7.181 & 0 & 0 & 64\\
    \bottomrule
    \multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
    \end{tabular}
+   \label{tab:decomp_exp}
    \end{table}
 
-\begin{table}[H]
+\begin{table}[htbp]
     \centering
     \caption{Cross-sectional Decomposition of Countries' Log Import Value}
     \begin{tabular}[t]{lcccccc}
@@ -255,9 +286,17 @@ Non-coniferous Tropical & 167 & 3.305 & 7.181 & 0 & 0 & 64\\
    \bottomrule
    \multicolumn{7}{l}{\rule{0pt}{1em}* p $<$ 0.1, ** p $<$ 0.05, *** p $<$ 0.01}\\
    \end{tabular}
+   \label{tab:decomp_imp}
    \end{table}
 
-   \begin{table}[H]
+   \textit{\textbf{Fact5:} Trade flow is sensitive to the distance between importer and exporter.}.\\
+   In general, as the distance between two countries increases, the volume of trade between them decreases (\cite{allen201813}). To examine this relationship in the trade of roundwood, I regress the following regression, what is called, ``Gravity Equation'', with panel data over 2001 to 2018:
+   \begin{align}
+    \log v_{i \to j, t} = \beta_0 + \beta_1 \log d_{i \to j} + \delta_{i, t} + \gamma_{j, t} + \varepsilon_{i,j,t}
+   \end{align}
+   where $v_{i \to j, t}$ represents export value from country $i$ to $j$ at year $t$ and $d_{i \to j}$ is a time in-variant bilateral distance between $i$ and $j$. Table \ref{tab:summary_stat} suggests that the elasticity of distance is $-0.7 \sim -2$, which indicates that 1\% increase in the distance between two countries results in a $-0.7 \sim -2$ \% decrease in the trade value between them. This value is consistent with \cite{allen201813}.
+   
+   \begin{table}[htbp]
     \caption{Cross-sectional Gravity Equation of Log Export Value}
     \centering
     \begin{tabular}{lccc}
@@ -268,7 +307,7 @@ Non-coniferous Tropical & 167 & 3.305 & 7.181 & 0 & 0 & 64\\
        Model:                             & (1)            & (2)            & (3)\\  
        \midrule
        \emph{Variables}\\
-       log(distw)                         & -1.916$^{***}$ & -1.226$^{***}$ & -0.6735$^{***}$\\   
+       log(distance)                         & -1.916$^{***}$ & -1.226$^{***}$ & -0.6735$^{***}$\\   
        & (0.1864)       & (0.1215)       & (0.0907)\\   
         \midrule
         \emph{Fixed-effects}\\
