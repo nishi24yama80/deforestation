@@ -225,6 +225,53 @@ Panel A shows that Myanmar's export ban in 2014 did not have much impact on the 
  \end{table}
 
 \section{A Model of Deforestation Propagation}
+Based on the properties of the roundwood trade network, this section constructs a simple model of the roundwood trade, and then presents a hypothesis induced by prediction of the model. The basic framework is quantity competition, what is called, Cournot competition. In usual Cournot setting, firms decide quantity of supply to a market to maximize their profit. This section describes the Cournot competition model as a game where $n$ countries supply homogeneous roundwood to one market. I introduce a general model at first, and then simplify the model to discuss the implication. \\
+
+I would like to assume that there are n countries which has one market denoted by $M_i$, respectively. Thus, in total, there are $n$ markets $\{ M_1, ..., M_n \}$. In addition to the market, each country has one supplier firm $F_i$, and there are $n$ firms $\{ F_1, ..., F_n \}$ in total. Thus, this is a Cournot model where markets and firms belong to a bipartite graph. Every firm produces an homogeneous good to supply $n$ markets. Each firm choose a vector comsisted of quantity to supply each market, $\mathbf{q}_i = (q_{i1}, ..., q_{in})$ where $q_{ij}$ means quantity that firm $i$ supplies to market $j$. Every market has an identical inverse linear demand function $p_i = D(q_{1i}, ..., q_{ni}) = a_i - \sum_{j=1}^n q_{ji}$. Profit function of each firm is given by $\pi_i (\mathbf{q}_1, ..., \mathbf{q}_n) = \sum_{j = 1}^{n} ((a_j - \sum_{k=1}^n q_{kj}) q_{ij} - c_{i} (\sum_{j = 1}^{n} q_{ij} ) ^ 2 )$. Firms choose their strategy $\mathbf{q}_i$, that is, how much the firm produce and supply to each market, to maximize their profit. As \cite{bimpikis2019cournot} discusses, there is unique Nash equilibrium when this game has symmetric structure, that is, $a_1 = a_2 = ... = a_n = a$ and $c_1 = c_2 = ... = c_n = c$. On the other hand, the uniqueness of the equilibrium and the analytical solution is unknown for assymmetric cases. However, our interest is how assymmetric case where each firm has heterogeneous trade cost to the markets. To be more precise, I would like to discuss how assymmetric trade costs affect firms' decision when one of the firm exit from the markets. Therefore, we need to simplify this model from the general model. \\
+
+From now on, we will consider a case where there are three countries. We assume that one of the three countries (country $1$) has both a market and a supplier, and the other two countries (country $2$ and country $3$) have only a supplier respectively. We can consider the country with both a market and a supplier as a country which produce roundwood and supply to Chinese market itself. On the other hand, the rest countries are developing countries that have plenty of forests to supply to the large country but that do not have a sufficiently large domestic market, such as Myanmar. Each of the three suppliers (Supplier $i$) chooses quantity $q_i$ to supply the market. The market of country $1$ has a inverse linear demand function
+\begin{align}
+    p = a - \sum_{i=1}^3 q_i
+\end{align}
+
+The suppliers are located in different countries, so they have different shipping cost to the market. We assume that the cost function is a quadratic shape $c_{i} q_i ^ 2$, where $c_i$ is the sum of marginal cost to produce the goods and trade cost to supply the goods to the market. If the marginal cost is the same among three firms, then the $c_1$ is smaller than $c_2$ and $c_3$ because the supplier of country $1$ is located in the same country as the market while suppliers in country $2$ and $3$ need to transport the product with bulk log carrier. The supplier $i$'s profit function is given by 
+\begin{align}
+    \pi_i (q_1, q_2, q_3) = (a - \sum_{j=1}^3 q_{j}) q_{i} - c_{i} q_i ^ 2 
+\end{align}
+
+Supplier $i$ choose the optimal supply quantity $q_i$ which maximizes $i$'s the profit. Thus, by first order conditions, the Nash equilibrium $q_1^*, q_2^*, q_3^*$ satisfies the following three equations:
+
+\begin{align}
+    2(c_1 + 1) q_1^* + q_2 ^* + q_2 ^ * + q_3 ^ * - a &= 0 \\
+    2(c_2 + 1) q_2^* + q_2 ^* + q_3 ^ * + q_1 ^ * - a &= 0 \\
+    2(c_3 + 1) q_3^* + q_2 ^* + q_1 ^ * + q_2 ^ * - a &= 0
+\end{align}
+
+Thus, we obtain 
+\begin{align}
+    q_1^* = \frac{4 a c_{2} c_{3} + 2 a c_{2} + 2 a c_{3} + a}{8 c_{1} c_{2} c_{3} + 8 c_{1} c_{2} + 8 c_{1} c_{3} + 4 c_{1} + 8 c_{2} c_{3} + 8 c_{2} + 6 c_{3} + 4} \\
+    q_2^* = \frac{4 a c_{1} c_{3} + 2 a c_{1} + 2 a c_{3} + a}{8 c_{1} c_{2} c_{3} + 8 c_{1} c_{2} + 8 c_{1} c_{3} + 4 c_{1} + 8 c_{2} c_{3} + 8 c_{2} + 6 c_{3} + 4} \\
+    q_3^* = \frac{4 a c_{1} c_{2} + 4 a c_{2} + a}{8 c_{1} c_{2} c_{3} + 8 c_{1} c_{2} + 8 c_{1} c_{3} + 4 c_{1} + 8 c_{2} c_{3} + 8 c_{2} + 6 c_{3} + 4}
+\end{align}
+
+Next, let us consider the situation where country $3$ bans its log export and supplier $3$ exits from the market. Then, how will supplier $1$ and $2$ react? Since $q_3$ is fixed at $0$, the profit function of supplier $1$ and $2$ are 
+
+\begin{align}
+    \pi_i (q_1, q_2, 0) = (a - q_i - q_j) q_{i} - c_{i} q_i ^ 2 
+\end{align}
+
+Thus, the Nash equilibrium after country $3$'s export ban $q_1^{**}, q_2^{**}$ satisfies the following two equations:
+
+\begin{align}
+    2(c_1 + 1) q_1^{**} + q_2 ^{**} + q_2 ^ {**} - a &= 0 \\
+    2(c_2 + 1) q_2^{**} + q_2 ^{**} + q_1 ^ {**} - a &= 0 
+\end{align}
+
+Thus, the new Nash equilibrium after the export ban policy is
+\begin{align}
+    q_1^{**} = \frac{2 a c_{2} + a}{4 c_{1} c_{2} + 4 c_{1} + 4 c_{2} + 3} \\
+    q_2^{**} = \frac{2 a c_{1} + a}{4 c_{1} c_{2} + 4 c_{1} + 4 c_{2} + 3}
+\end{align}
 
 \section{Impacts on Export Destinations}
 In this section, I examine how Russia's log export restrictions and Myanmar's log export ban affected its trade partners, respectively. For instance, Myanmar exported large number of teak logs (non-coniferous and tropical roundwood) to China, but how did China react to the Myanmar's supply shock in 2007? The quantity competition model predicts that China would increase production of non-coniferous roundwood to supply its home market due to the small trade cost. To empirically test this hypothesis, I employ a framework of potential outcome and apply generalized synthetic control method proposed by \cite{xu2017generalized}. I first describe the identification strategy and then present the estimation results.
@@ -247,7 +294,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \caption{Impacts of Russia's Export Restriction on Its Trade Partners' Roundwood Production}
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/Production_Industrial_roundwood__coniferous.png"}}
     \subfigure[][Non-coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/Production_Industrial_roundwood__non-coniferous.png"}}
-    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:att_prod_Russia}
 \end{figure}
 
@@ -257,7 +304,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/imp_quant_Coniferous.png"}}
     \subfigure[][Non-conif Non-tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/imp_quant_Non-coniferous_non-tropical.png"}}
     \subfigure[][Non-conif Tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/imp_quant_Non-coniferous_tropical.png"}}
-    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:att_imp_Russia}
 \end{figure}
 
@@ -267,7 +314,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \caption{Impacts of Russia's Export Restriction on Its Trade Partners' Roundwood Production}
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/CF/Production_Industrial_roundwood__coniferous.png"}}
     \subfigure[][Non-coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/CF/Production_Industrial_roundwood__non-coniferous.png"}}
-    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:cf_prod_Russia}
 \end{figure}
 
@@ -277,7 +324,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/CF/imp_quant_Coniferous.png"}}
     \subfigure[][Non-conif Non-tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/CF/imp_quant_Non-coniferous_non-tropical.png"}}
     \subfigure[][Non-conif Tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/CF/imp_quant_Non-coniferous_tropical.png"}}
-    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:cf_imp_Russia}
 \end{figure}
 
@@ -288,7 +335,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \caption{Impacts of Myanmar's Export Restriction on Its Trade Partners' Roundwood Production}
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/Production_Industrial_roundwood__coniferous.png"}}
     \subfigure[][Non-coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/Production_Industrial_roundwood__non-coniferous.png"}}
-    \caption*{\small{The figure shows impacts of Myanmar's export restriction policy in 2014 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2014. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Myanmar's export restriction policy in 2014 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2014. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:att_prod_Myanmar}
 \end{figure}
 
@@ -298,7 +345,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/imp_quant_Coniferous.png"}}
     \subfigure[][Non-conif Non-tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/imp_quant_Non-coniferous_non-tropical.png"}}
     \subfigure[][Non-conif Tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/imp_quant_Non-coniferous_tropical.png"}}
-    \caption*{\small{The figure shows impacts of Myanmar's export restriction policy in 2014 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2014. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Myanmar's export restriction policy in 2014 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2014. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:att_imp_Myanmar}
 \end{figure}
 
@@ -308,7 +355,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \caption{Impacts of Myanmar's Export Restriction on Its Trade Partners' Roundwood Production}
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/CF/Production_Industrial_roundwood__coniferous.png"}}
     \subfigure[][Non-coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/CF/Production_Industrial_roundwood__non-coniferous.png"}}
-    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:cf_prod_Myanmar}
 \end{figure}
 
@@ -318,7 +365,7 @@ In the estimation, we use country-year-level panel data from 1990 to 2018. We em
     \subfigure[][Coniferous]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/CF/imp_quant_Coniferous.png"}}
     \subfigure[][Non-conif Non-tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/CF/imp_quant_Non-coniferous_non-tropical.png"}}
     \subfigure[][Non-conif Tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/CF/imp_quant_Non-coniferous_tropical.png"}}
-    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidence interval.}}
     \label{fig:cf_imp_Myanmar}
 \end{figure}
 
