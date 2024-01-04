@@ -107,6 +107,67 @@ Panel A shows that Myanmar's export ban in 2014 did not have much impact on the 
 \end{figure}
 
 \section{Sketch of the Trade Network of Logs}
+This section provides descriptive statistics to convey whole picture of the trade network data. First, I show cross-sectional summary statistics of roundwoods in 2018 with Table \ref{tab:summary_stat}.
+
+\begin{table}[htbp]
+    \caption{Cross-sectional Summary Statistics on Roundwood in 2018}
+    \centering
+    \begin{tabular}{lcccccc}
+        \tabularnewline \midrule \midrule
+        variable & n & mean & sd & min & median & max\\
+        \midrule
+        \emph{Production Quantity ($m^3$)}\\
+        Coniferous & 137 & 8858345 & 32249753 & 0 & 177000.0 & 294955296\\
+        
+        Non-coniferous & 176 & 5888862 & 20991251 & 0 & 468035.5 & 152244540\\
+        
+        \midrule
+        \emph{Export Quantity ($m^3$)}\\
+Coniferous & 164 & 935338.63 & 4136801.64 & 0 & 319.0 & 45779114\\
+
+Non-coniferous Non-tropical & 166 & 306597.55 & 1377179.91 & 0 & 1593.5 & 14389012\\
+
+Non-coniferous Tropical & 160 & 49025.86 & 192353.46 & 0 & 266.5 & 1728372\\
+\midrule
+\emph{Export Value ($1000$USD)}\\
+Coniferous & 164 & 49572.77 & 219250.38 & 0 & 17.0 & 2426291\\
+
+Non-coniferous Non-tropical & 166 & 26410.50 & 91635.86 & 0 & 485.5 & 848946\\
+
+Non-coniferous Tropical & 160 & 17798.10 & 66185.29 & 0 & 114.0 & 531772\\
+\midrule
+\emph{Import Quantity ($m^3$)}\\
+Coniferous & 172 & 1028691.20 & 7421256.74 & 0 & 5074.5 & 94999406\\
+
+Non-coniferous Non-tropical & 173 & 194535.12 & 888875.56 & 0 & 822.0 & 9742233\\
+
+Non-coniferous Tropical & 167 & 53211.02 & 603747.78 & 0 & 0.0 & 7794113\\
+\midrule
+\emph{Export Value ($1000$USD)}\\
+Coniferous & 172 & 62749.98 & 452696.46 & 0 & 310.0 & 5794961\\
+
+Non-coniferous Non-tropical & 173 & 26954.62 & 183700.13 & 0 & 155.0 & 2371915\\
+
+Non-coniferous Tropical & 167 & 18924.81 & 217633.80 & 0 & 0.0 & 2810876\\
+
+\midrule
+\emph{Number of Export Links}\\
+Coniferous & 164 & 6.835 & 11.375 & 0 & 1 & 59\\
+
+Non-coniferous Non-tropical & 166 & 8.343 & 12.826 & 0 & 2 & 90\\
+
+Non-coniferous Tropical & 160 & 3.481 & 5.428 & 0 & 1 & 27\\
+\midrule
+\emph{Number of Import Links}\\
+Coniferous & 172 & 6.512 & 8.703 & 0 & 2 & 48\\
+
+Non-coniferous Non-tropical & 173 & 7.919 & 12.083 & 0 & 2 & 89\\
+Non-coniferous Tropical & 167 & 3.305 & 7.181 & 0 & 0 & 64\\
+\midrule \midrule
+        \end{tabular}
+        \label{tab:summary_stat}
+ \end{table}
+
 
 
 \begin{table}[htbp]
@@ -295,7 +356,7 @@ Moreover, this property suggests that if supply shock happens to one market, the
 
 
 \section{Impacts on Export Destinations}
-In this section, I examine how Russia's log export restrictions and Myanmar's log export ban affected its trade partners, respectively. For instance, Myanmar exported large number of teak logs (non-coniferous and tropical roundwood) to China, but how did China react to the Myanmar's supply shock in 2007? The quantity competition model predicts that China would increase production of non-coniferous roundwood to supply its home market due to the small trade cost. To empirically test this hypothesis, I employ a framework of potential outcome and apply generalized synthetic control method proposed by \cite{xu2017generalized}. I first describe the identification strategy and then present the estimation results.
+In this section, I examine how Russia's log export restrictions and Myanmar's log export ban affected its trade partners, respectively. For instance, Myanmar exported large number of teak logs (non-coniferous and tropical roundwood) to China, but how did China react to the Myanmar's supply shock in 2014? The quantity competition model predicts that China would increase production of non-coniferous roundwood to supply its home market due to the small trade cost. To empirically test this hypothesis, I employ a framework of potential outcome and apply generalized synthetic control method proposed by \cite{xu2017generalized}. I first describe the identification strategy and then present the estimation results.
 
 \subsection{Identification strategy}
 
@@ -391,7 +452,25 @@ In the estimation, I use country-year-level panel data from 1990 to 2018. We emp
 \end{figure}
 
 \section{Impacts on Trade Competitors}
+This section discusses how Russia's log export restrictions and Myanmar's log export ban affected their trade competitors, respectively. For instance, Myanmar exported large number of teak logs (non-coniferous and tropical roundwood) to China, and Papua New Guinea was the other supplier of roundwood to China in 2013. Then, how did Papua New Guinea react to the Myanmar's supply shock in 2014? 
 
+The quantity competition model predicts that Myanmar's trade competitors, such as Papua New Guinea, would also increase production of non-coniferous roundwood to supply to Myanmar's previous export destinations, such as China. At the same time, the model also implicates that the increase in production is not so large in Myanmar's trade competitors as in Myanmar's export destination countries due to trade costs. To empirically test the impacts of Russia's (Myanmar's) export restriction policy on their trade competitors, I apply shift-share approach which is common in literature of international trade and shock propagation in supply chain networks. In my specification, I follow the approach of \cite{huneeus2018production}. First, I describe the identification strategy, and then presents the estimation results.
+
+\subsection{Identification Strategy}
+The basic idea of shift-share design is to regress the outcome on how much the unit was exposed to the shock. In this setting, countries who supplied coniferous roundwood to markets where Russia supplied coniferous roundwood as well before the export restriction were drastically exposed to the supply shock of Russian conoferous roundwood. On the other hand, countries that did not export coniferous roundwood at all or did not export coniferous roundwood to the market where Russia supplied were not exposed to the supply shock in 2014 so much. To quantify this exposure, we define the exposure index as follows:
+\begin{align}
+    \text{Exposure}_i =  - \sum_{m \in N \setminus \{ i \}} \frac{v_{i \to m, t_0}}{\sum_{j \in N \setminus \{ i \}} v_{i \to j, t_0}} (v_{K \to m, t_0+2} - v_{K \to m, t_0+1})
+\end{align}
+where $v_{i \to m, t}$ denotes export value of roundwood from country $i$ to country $m$, $t_0$ denotes one year before the supply shock ($t_0 = 2006$ for Russia's case and $t_0 = 2013$ for Myanmar's case, respectively), and $K$ denotes the country which leads the supply shock (Russia or Myanmar). The first term, what is called ``share'', is a ratio of country $i$'s export value to country $m$ out of country $i$'s total export value before the shock began. Thus, if country $i$ was dependent on country $m$ as their supply destination to a great extent, then share of country $m$ for country $i$ is large. The second term, what is called ``shift'', is a difference in exports from shock leading country $K$ to country $m$ between one year after the shock and the start year of the shock (difference between 2008 and 2007 for Russian case and difference between 2015 and 2014 for Myanmar case, respectively). If country $m$ is a large customer for shock-leading country $K$ and the trade flow between these two country drops rapidly by the country $K$'s export restriction policy, then this shift takes a large negative value. Finally, to make it easy to interpret the estimation results, I reverse the sign of the exposure index. Thus, the positive coefficient of this exposure index means that the supply shock increases value of the outcome while negative coefficient means that the supply shock reduces value of the outcome. While suppliers endogeneously choose share value, which represents the destination of exports, the shift value, which represnts the shock-leading country's reduction in export due to its domestic reason, is exogeneous for the other suppliers, given the share. This combination of endogeneous share and exogeneous shift is consistent with what \cite{adao2019shift} validates. In addition, to avoid concerns that countries choose their supply destination by predicting the forthcoming Russia's (Myanmar's) supply shock, I use the lagged share of each markets. The qualitative evidence I present in section 3, the other countries could not predict the supply shock caused by the forthcoming export restriction policy one year before. Moreover, as I confirm in the descriptive statistics part, the links of the export is quite stable during periods without shocks. Thus, this lagged share still works as a share of the year when the shock started and it satisfies the assumption that the lagged share is not a result of prediction of forthcoming supply shocks.\\
+
+In the regression, I regress the first difference in the outcome on the exposure indices of exports of coniferous roundwood, non-coniferous non-tropical roundwood, and non-coniferous tropical roundwood. I run the following regression formula:
+\begin{align}
+    y_{i, t_0 + h} - y_{i, t_0} = \beta_0 + \beta_1 &\text{Exposure}_{\text{Conif}, i} + \beta_2 \text{Exposure}_{\text{Non-conif Non-trop}, i} \nonumber \\
+    &+ \beta_3 \text{Exposure}_{\text{Non-conif Trop}, i} + \varepsilon_{i, h}
+\end{align}
+where $h$ means length of the lag ($h = -5, -4, ..., 12$ for Russia's case and $h = -12, -11, ..., 5$ for Myanmar's case, respectively). $y_{i, t_0 + h} - y_{i, t_0}$ represents difference in the outcome between outcome of one year before the shock ($t_0$) and outcome of the current year ($t_0 + h$). I run this regression by year, namely by $h$.The outcomes I mainly presents hereafter are production of roundwoods and total exports of roundwoods of each country. Thus, the positive coefficient on the exposure index of the shocked roundwood (coniferous roundwood for Russia and non-coniferous non-tropical roundwood for Myanmar) indicates that the supply shock increases Russia's (Myanmar's) export competitors' production (export).
+
+\subsection{Estimation Results}
 
 \begin{figure}[H] 
     \centering
@@ -441,6 +520,31 @@ In the estimation, I use country-year-level panel data from 1990 to 2018. We emp
 \bibliography{deforestation_reference}
 
 \section*{Appendix}
+
+
+\begin{table}[htbp]
+    \caption{Cross-sectional Summary Statistics on Roundwood Price in 2018}
+    \centering
+    \begin{tabular}{lcccccc}
+        \tabularnewline \midrule \midrule
+        variable & n & mean & sd & min & median & max\\
+        \midrule
+        \emph{Import Price (1000USD / $m^3$)}\\
+        Coniferous & 86 & 0.059 & 0.009 & 0.000 & 0.061 & 0.062\\
+        Non-coniferous Non-tropical & 104 & 0.327 & 0.529 & 0.000 & 0.179 & 4.400\\
+        Non-coniferous Tropical & 59 & 0.879 & 1.505 & 0.000 & 0.571 & 10.750\\
+        \midrule
+        \emph{Export Price (1000USD / $m^3$)}\\
+        Coniferous & 86 & 0.051 & 0.010 & 0.000 & 0.053 & 0.060\\
+        Non-coniferous Non-tropical & 104 & 0.457 & 1.071 & 0.000 & 0.204 & 9.562\\
+        Non-coniferous Tropical & 59 & 3.349 & 18.030 & 0.031 & 0.520 & 138.733\\
+\midrule \midrule
+        \end{tabular}
+        \caption*{\small{Summary statistics of import price and export price in roundwood markets. The samples are countries with positive quantity of import or export of roundwoods.}}
+        \label{tab:summary_stat_price}
+ \end{table}
+
+
 \subsection*{A. Gravity Equation}
 \begin{figure}[htbp] 
     \centering
