@@ -58,7 +58,7 @@ This paper contributes to fill the gap between literature on deforestation and t
 
 As for the empirical method to examine propagation of a supply shock, I refer to recent growing literature of network analysis in economics. \cite{acemoglu2012network} firstly introduces the analysis of how shock on an agent propagates to the other agents throughout network between agents. Based on this strand, various papers discuss how a shock to a specific firms affects the other firms that do not directly suffer from the shock through production supply chain. For example, \cite{barrot2016input} and \cite{carvalho2021supply} examine how shocks of the Eastern Japan Great Earthquake affects firms that are located far from the damaged area through their supply chain networks. I follow shift-share approach of \cite{huneeus2018production} to empirically show the network propagation effects of one country's pro-environmental policy on the other countries.\\
 
-The remainder of this paper is organized as follows. Section 2 describes how I construct trade network flow data for forest products. Section 3 provides an overview of two trade restriction policies (Russia in 2007 and Myanmar in 2014) and explains how these policies are exogeneous shocks for other countries. Section 4 presents a sketch of the network data to give an overall picture of the trade network. Based on some basic facts explained in Section 4, Section 5 presents a simple model for constructing hypotheses on how one country's policy affects other countries. Section 6 describes the identification strategy for empirically testing the theoretical hypothesis. Section 7 presents the empirical results and Section 8 discusses their interpretation. Finally, Section 9 presents the conclusions. Extensions of the theoretical model and robustness checks of the empirical results are in the appendix.\\
+The remainder of this paper is organized as follows. Section 2 describes how I construct trade network flow data for forest products. Section 3 provides an overview of two trade restriction policies (Russia in 2007 and Myanmar in 2014) and explains how these policies are exogeneous shocks for other countries. Section 4 presents a sketch of the network data to give an overall picture of the trade network. Based on some basic facts explained in Section 4, Section 5 presents a simple model for constructing hypotheses on how one country's policy affects other countries. Based on the theoretical predictions, Section 6 and 7 presents empirical results. Section 6 describes impacts of export restriction policy on the country's log trade partners. Then, Section 7 presents impacts on trade competitors that supply logs to the Russia's (or Myanmar's) trade partners. Section 8 discusses interpretation of the empirical results. Finally, Section 9 presents the conclusions. Extensions of the theoretical model and robustness checks of the empirical results are in the appendix.\\
 
 
 \section{Trade Flow Data}
@@ -146,6 +146,16 @@ Panel A shows that Myanmar's export ban in 2014 did not have much impact on the 
  \end{table}
 
 \textit{\textbf{Fact2:} Intensive margin (average value of export / import) accounts for more than half of the variation of countries' export and import}.
+
+\begin{figure}[H]
+    \centering
+    \caption{Number of Roundwood Trade Links in 2018}
+    \subfigure[][Export Links]{\centering \includegraphics*[bb=0 0 1000 1000, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/num_links/num_links_exp.png"}}
+    \subfigure[][Import Links]{\centering \includegraphics*[bb=0 0 1000 1000, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/num_links/num_links_imp.png"}}
+    \caption*{\small{The left panel is a histogram of number of links for roundwood exports, and the right panel is a histogram of number of links for roundwood imports. The unit is country-level, and there are 164 countries for coniferous roundwood, 166 countries for non-coniferous non-tropical roundwood, and 160 countries for non-coniferous tropical roundwood.}}
+    \label{fig:num_of_trade_links}
+\end{figure}
+
 \begin{table}[H]
     \centering
     \caption{Cross-sectional Decomposition of Countries' Log Export Value}
@@ -216,9 +226,64 @@ Panel A shows that Myanmar's export ban in 2014 did not have much impact on the 
 
 \section{A Model of Deforestation Propagation}
 
-\section{Identification Strategy}
+\section{Impacts on Export Destinations}
+In this section, I examine how Russia's log export restrictions and Myanmar's log export ban affected its trade partners, respectively. For instance, Myanmar exported large number of teak logs (non-coniferous and tropical roundwood) to China, but how did China react to the Myanmar's supply shock in 2007? The quantity competition model predicts that China would increase production of non-coniferous roundwood to supply its home market due to the small trade cost. To empirically test this hypothesis, I employ a framework of potential outcome and apply generalized synthetic control method proposed by \cite{xu2017generalized}. I first describe the identification strategy and then present the estimation results.
 
-\section{Estimation Results of Network Propagation}
+\subsection{Identification strategy}
+
+We would like to know how the Russia's (Myanmar's) export restriction (ban) policy would affect its trade partners, i.e., export destinations. In the extended Cournot model, such trade partners are expected to increase their production to supply the home market and compensate the reduction in its import from Russia (Myanmar) because such country's trade cost to ship to its home market is much lower than the other country's cost to ship to the market. \\
+
+In order to apply the causal inference framework, we need to define a treatment in this problem. Here, we define a treatment as a decrease in imports from Russia (Myanmar) due to Russia's (Myanmar's) export restriction policy. If one country imported logs from Russia (Myanmar) before the supply shock, the country would be likely to continue the import from Russia (Myanmar) if Russia (Myanmar) did not implement export restriction policy. On the other hand, if one country did not import any logs from Russia (Myanmar) even before the supply shock, the country would not be likely to import from Russia (Myanmar) even without any restriction policy. Thus, as a proxy of the treatment, we employ a binary variable which indicates the country imported logs from Russia (Myanmar) before the restriction policy. We denote this binary variable with $T_i$, where $T_i$ is 1 if country $i$ imported coniferous roundwood (non-coniferous and non-tropical roundwood) from Russia (Myanmar) one year before the policy intervention, and is 0 otherwise. $T_i = 1$ implies that the country I would be directly exposed to the policy intervention of Russia (Myanmar) in terms of the reduction in imports from Russia (Myanmar). On the other hand, $T_i = 0$ implies that the country would not be directly exposed to the policy. The outcome of interest is country $i$'s production, import, export of roundwoods.\\
+
+Since we have long-term trade panel data before and after the policy intervention, we can implement difference-in-differences approach to estimate the average treatment effects on the treated units (ATT). However, one concern is the heterogeneity in trends between treatment group, that is, those who imported roundwood from Russia (Myanmar), and trend of control group, that is, those who did not import roundwood from Russia (Myanmar). For example, countries who imported logs from Russia (Myanmar) have different locational characteristics from control countries. To address this problem, we use synthetic difference-in-differences method proposed by \cite{xu2017generalized}. \cite{xu2017generalized} integrates synthetic control methods (\cite{abadie2010synthetic}) and linear fixed effects models of DID framework. This method infers counterfactuals for each treated unit with data of control group units by applying synthetic control method. In addition to that, \cite{xu2017generalized} extends the synthetic control approach to a case of multiple treated units.\\ 
+
+In the estimation, we use country-year-level panel data from 1990 to 2018. We employ two-way fixed effects as additive components of the right-hand side. To obtain information on the uncertainty of the estimates, we calculate standard errors using parametric method with 1000 bootstrap sampling.
+
+\subsection{Estimation Results}
+\subsubsection*{Impacts of Russia's Log Export Restriction in 2007}
+
+\begin{figure}[H] 
+    \centering
+    \caption{Impacts of Russia's Export Restriction on Its Trade Partners' Roundwood Production}
+    \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/Production_Industrial_roundwood__coniferous.png"}}
+    \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/Production_Industrial_roundwood__non-coniferous.png"}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \label{fig:att_prod_Russia}
+\end{figure}
+
+
+\begin{figure}[H] 
+    \centering
+    \caption{Impacts of Russia's Export Restriction on Its Trade Partners' Roundwood Import Volume}
+    \subfigure[][Coniferous]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/imp_quant_Coniferous.png"}}
+    \subfigure[][Non-conif Non-tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/imp_quant_Non-coniferous_non-tropical.png"}}
+    \subfigure[][Non-conif Tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Russia/ATT/imp_quant_Non-coniferous_tropical.png"}}
+    \caption*{\small{The figure shows impacts of Russia's export restriction policy in 2007 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2007. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \label{fig:att_imp_Russia}
+\end{figure}
+
+\subsubsection*{Impacts of Myanmar's Log Export Restriction in 2007}
+
+\begin{figure}[H] 
+    \centering
+    \caption{Impacts of Myanmar's Export Restriction on Its Trade Partners' Roundwood Production}
+    \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/Production_Industrial_roundwood__coniferous.png"}}
+    \subfigure[][Coniferous]{\includegraphics*[bb=0 0 900 700, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/Production_Industrial_roundwood__non-coniferous.png"}}
+    \caption*{\small{The figure shows impacts of Myanmar's export restriction policy in 2014 on their trade partners' production volumne of coniferous roundwood (a) and non-coniferous roundwood. X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2014. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \label{fig:att_prod_Myanmar}
+\end{figure}
+
+\begin{figure}[H] 
+    \centering
+    \caption{Impacts of Myanmar's Export Ban on Its Trade Partners' Roundwood Import Volume}
+    \subfigure[][Coniferous]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/imp_quant_Coniferous.png"}}
+    \subfigure[][Non-conif Non-tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/imp_quant_Non-coniferous_non-tropical.png"}}
+    \subfigure[][Non-conif Tropical]{\includegraphics*[bb=0 0 650 650, scale=0.2]{"~/OneDrive - The University of Tokyo/deforestation/fig/syntheticDID/Myanmar/ATT/imp_quant_Non-coniferous_tropical.png"}}
+    \caption*{\small{The figure shows impacts of Myanmar's export restriction policy in 2014 on their trade partners' import volumne of coniferous roundwood (a), non-coniferous non-tropical roundwood (b), and non-coniferous tropical roundwood (c). X axis represents ellapesed time from the policy intervention. Thus, t = 0 means 2014. Y axis is the estimates of ATT. The black lines represent the point estimates and gray shadows represnt 95\% confidential interval.}}
+    \label{fig:att_imp_Myanmar}
+\end{figure}
+
+\section{Impacts on Trade Competitors}
 
 \section{Discussion}
 
