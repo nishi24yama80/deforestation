@@ -1,0 +1,103 @@
+\begin{thebibliography}{19}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Abadie et~al.(2010)Abadie, Diamond, and Hainmueller]{abadie2010synthetic}
+Alberto Abadie, Alexis Diamond, and Jens Hainmueller.
+\newblock Synthetic control methods for comparative case studies: Estimating the effect of california’s tobacco control program.
+\newblock \emph{Journal of the American statistical Association}, 105\penalty0 (490):\penalty0 493--505, 2010.
+
+\bibitem[Abman and Lundberg(2020)]{abman2020does}
+Ryan Abman and Clark Lundberg.
+\newblock Does free trade increase deforestation? the effects of regional trade agreements.
+\newblock \emph{Journal of the Association of Environmental and Resource Economists}, 7\penalty0 (1):\penalty0 35--72, 2020.
+
+\bibitem[Acemoglu et~al.(2012)Acemoglu, Carvalho, Ozdaglar, and Tahbaz-Salehi]{acemoglu2012network}
+Daron Acemoglu, Vasco~M Carvalho, Asuman Ozdaglar, and Alireza Tahbaz-Salehi.
+\newblock The network origins of aggregate fluctuations.
+\newblock \emph{Econometrica}, 80\penalty0 (5):\penalty0 1977--2016, 2012.
+
+\bibitem[Adao et~al.(2019)Adao, Koles{\'a}r, and Morales]{adao2019shift}
+Rodrigo Adao, Michal Koles{\'a}r, and Eduardo Morales.
+\newblock Shift-share designs: Theory and inference.
+\newblock \emph{The Quarterly Journal of Economics}, 134\penalty0 (4):\penalty0 1949--2010, 2019.
+
+\bibitem[Allen and Arkolakis(2018)]{allen201813}
+Treb Allen and Costas Arkolakis.
+\newblock 13 modern spatial economics: a primer.
+\newblock \emph{World Trade Evolution}, page 435, 2018.
+
+\bibitem[Balboni et~al.(2023)Balboni, Berman, Burgess, and Olken]{balboni2023economics}
+Clare Balboni, Aaron Berman, Robin Burgess, and Benjamin~A Olken.
+\newblock The economics of tropical deforestation.
+\newblock \emph{Annual Review of Economics}, 15:\penalty0 723--754, 2023.
+
+\bibitem[Barrot and Sauvagnat(2016)]{barrot2016input}
+Jean-No{\"e}l Barrot and Julien Sauvagnat.
+\newblock Input specificity and the propagation of idiosyncratic shocks in production networks.
+\newblock \emph{The Quarterly Journal of Economics}, 131\penalty0 (3):\penalty0 1543--1592, 2016.
+
+\bibitem[Bernard et~al.(2009)Bernard, Jensen, Redding, and Schott]{bernard2009margins}
+Andrew~B Bernard, J~Bradford Jensen, Stephen~J Redding, and Peter~K Schott.
+\newblock The margins of us trade.
+\newblock \emph{American Economic Review}, 99\penalty0 (2):\penalty0 487--493, 2009.
+
+\bibitem[Bimpikis et~al.(2019)Bimpikis, Ehsani, and Ilk{\i}l{\i}{\c{c}}]{bimpikis2019cournot}
+Kostas Bimpikis, Shayan Ehsani, and Rahmi Ilk{\i}l{\i}{\c{c}}.
+\newblock Cournot competition in networked markets.
+\newblock \emph{Management Science}, 65\penalty0 (6):\penalty0 2467--2481, 2019.
+
+\bibitem[Burgess et~al.(2012)Burgess, Hansen, Olken, Potapov, and Sieber]{burgess2012political}
+Robin Burgess, Matthew Hansen, Benjamin~A Olken, Peter Potapov, and Stefanie Sieber.
+\newblock The political economy of deforestation in the tropics.
+\newblock \emph{The Quarterly journal of economics}, 127\penalty0 (4):\penalty0 1707--1754, 2012.
+
+\bibitem[Carvalho et~al.(2021)Carvalho, Nirei, Saito, and Tahbaz-Salehi]{carvalho2021supply}
+Vasco~M Carvalho, Makoto Nirei, Yukiko~U Saito, and Alireza Tahbaz-Salehi.
+\newblock Supply chain disruptions: Evidence from the great east japan earthquake.
+\newblock \emph{The Quarterly Journal of Economics}, 136\penalty0 (2):\penalty0 1255--1321, 2021.
+
+\bibitem[Hanna(2010)]{hanna2010us}
+Rema Hanna.
+\newblock Us environmental regulation and fdi: evidence from a panel of us-based multinational firms.
+\newblock \emph{American Economic Journal: Applied Economics}, 2\penalty0 (3):\penalty0 158--189, 2010.
+
+\bibitem[Harstad(2023)]{harstad2023contingent}
+Bard Harstad.
+\newblock Contingent trade agreements.
+\newblock \emph{Manuscript, Stanford Univ}, 2023.
+
+\bibitem[Huneeus(2018)]{huneeus2018production}
+Federico Huneeus.
+\newblock Production network dynamics and the propagation of shocks.
+\newblock \emph{Graduate thesis, Princeton University, Princeton, NJ}, page~52, 2018.
+
+\bibitem[Lin and Zhang(2017)]{lin2017incidence}
+Ying Lin and Daowei Zhang.
+\newblock Incidence of russian log export tax: A vertical log-lumber model.
+\newblock \emph{Journal of Forest Economics}, 29:\penalty0 69--77, 2017.
+
+\bibitem[of~Economy~Trade and Industry(2022)]{meti}
+Ministry of~Economy~Trade and Industry.
+\newblock 2022 report on compliance by major trading partners with trade agreements wto epa/fta and iia.
+\newblock 2022.
+
+\bibitem[Tanaka et~al.(2022)Tanaka, Teshima, and Verhoogen]{tanaka2022north}
+Shinsuke Tanaka, Kensuke Teshima, and Eric Verhoogen.
+\newblock North-south displacement effects of environmental regulation: The case of battery recycling.
+\newblock \emph{American Economic Review: Insights}, 4\penalty0 (3):\penalty0 271--288, 2022.
+
+\bibitem[Van~der Werf et~al.(2009)Van~der Werf, Morton, DeFries, Olivier, Kasibhatla, Jackson, Collatz, and Randerson]{van2009co2}
+Guido~R Van~der Werf, Douglas~C Morton, Ruth~S DeFries, Jos~GJ Olivier, Prasad~S Kasibhatla, Robert~B Jackson, G~James Collatz, and James~T Randerson.
+\newblock Co2 emissions from forest loss.
+\newblock \emph{Nature geoscience}, 2\penalty0 (11):\penalty0 737--738, 2009.
+
+\bibitem[Xu(2017)]{xu2017generalized}
+Yiqing Xu.
+\newblock Generalized synthetic control method: Causal inference with interactive fixed effects models.
+\newblock \emph{Political Analysis}, 25\penalty0 (1):\penalty0 57--76, 2017.
+
+\end{thebibliography}

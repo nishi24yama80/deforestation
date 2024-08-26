@@ -14,31 +14,29 @@ item_list <- trade_df %>%
   pull()
 
 ####Gravity Eq using whole sample####
+item_vec <- c("Industrial roundwood, coniferous (export/import)", "Industrial roundwood, non-coniferous non-tropical (export/import)", "Industrial roundwood, non-coniferous tropical (export/import)")
 lm_geq_all1 <- feols(
-  log(value) ~ log(seadistance) | reporter_country + partner_country + as.factor(year),
+  log(value) ~ log(distw) | reporter_country^as.factor(year) + partner_country^as.factor(year),
   data = trade_df %>% 
-    filter(item == "Industrial roundwood, non-coniferous tropical (export/import)" & element == "Export Value")
+    filter(item == item_vec[1] & element == "Export Value") %>% 
+    filter(year > 2000)
 )
 
 lm_geq_all2 <- feols(
-  log(value) ~ log(seadistance) | reporter_country^as.factor(year) + partner_country^as.factor(year),
+  log(value) ~ log(distw) | reporter_country^as.factor(year) + partner_country^as.factor(year),
   data = trade_df %>% 
-    filter(item == "Industrial roundwood, non-coniferous tropical (export/import)" & element == "Export Value")
+    filter(item == item_vec[2] & element == "Export Value") %>% 
+    filter(year > 2000)
 )
 
 lm_geq_all3 <- feols(
-  log(value) ~ log(distw) | reporter_country + partner_country + as.factor(year),
-  data = trade_df %>% 
-    filter(item == "Industrial roundwood, non-coniferous tropical (export/import)" & element == "Export Value")
-)
-
-lm_geq_all4 <- feols(
   log(value) ~ log(distw) | reporter_country^as.factor(year) + partner_country^as.factor(year),
   data = trade_df %>% 
-    filter(item == "Industrial roundwood, non-coniferous tropical (export/import)" & element == "Export Value")
+    filter(item == item_vec[3] & element == "Export Value") %>% 
+    filter(year > 2000)
 )
 
-etable(lm_geq_all1, lm_geq_all2, lm_geq_all3, lm_geq_all4)
+etable(lm_geq_all1, lm_geq_all2, lm_geq_all3, tex = TRUE, cluster = c("reporter_country", "partner_country"), title = "Cross-sectional Gravity Equation of Log Export Value")
 
 ####Plot Fixed Effects####
 lm_geq_2016 <- feols(

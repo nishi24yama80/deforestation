@@ -116,24 +116,103 @@ forestry_df %>%
   arrange(desc(value)) %>% 
   View()
 
-areas <- unique(forestry_df$area)
+
 item_name <- "Roundwood"
 
-for (area_name in areas) {
-  tryCatch({
-    p <- forestry_df %>% 
-      filter(area == area_name & item == item_name) %>% 
-      ggplot(data = ., aes(x=year, y=value)) +
-      geom_line() +
-      facet_wrap(facets = ~element, scales="free_y") +
-      labs(title=area_name, subtitle = item_name)
-    ggsave(filename = paste0("fig/", item_name, "/", area_name, ".png"), plot = p)
-    print(area_name) 
-  }, error = function(e) {
-    print(area_name) 
-    print("error")
+item_list <- forestry_df %>% 
+  distinct(item) %>% 
+  pull()
+
+forestry_df %>% 
+  distinct(item)
+
+paste("fig/", item_list[1])
+
+areas <- unique(forestry_df$area)
+
+for (item_name in item_list) {
+  dir_name <- str_remove(item_name, " \\(export/import\\)")
+  dir.create(paste("fig/", dir_name))
+  for (area_name in areas) {
+    tryCatch({
+      p <- forestry_df %>% 
+        filter(area == area_name & item == item_name) %>% 
+        ggplot(data = ., aes(x=year, y=value)) +
+        geom_line() +
+        facet_wrap(facets = ~element, scales="free_y") +
+        labs(title=area_name, subtitle = item_name)
+      ggsave(filename = paste0("fig/", dir_name, "/", area_name, ".png"), plot = p)
+      print(area_name) 
+    }, error = function(e) {
+      print(area_name) 
+      print("error")
+    }
+    )  
   }
-  )
+  print(dir_name)
 }
 
+regions <- c("World", "Europe","Southern Europe", "Americas", "Northern America", "South America", "Western Europe", "Eastern Europe", "Northern Europe", "Asia", "South-eastern Asia", "Eastern Asia")
+
+regions2 <- c("Southern Europe", "Russia", "Northern America", "South America", "Western Europe", "Eastern Europe", "Northern Europe", "Asia", "South-eastern Asia", "Eastern Asia", "Africa")
+
+regions3 <- c("Southern Europe", "Northern America", "South America", "Western Europe", "Eastern Europe", "Northern Europe", "Asia", "South-eastern Asia", "Eastern Asia", "Africa")
+
+
+for (item_name in item_list) {
+  dir_name <- str_remove(item_name, " \\(export/import\\)")
+  dir_name <- str_remove(dir_name, ", ")
+  p <- forestry_df %>% 
+    filter(area_code %% 100 == 0) %>% 
+    mutate(
+      continent = case_when(
+        area_code >= 5100 & area_code < 5200 ~ "Africa",
+        area_code >= 5200 & area_code < 5300 ~ "America",
+        area_code >= 5300 & area_code < 5400 ~ "Asia",
+        area_code >= 5400 & area_code < 5500 ~ "Europe",
+        area_code >= 5500 & area_code < 5600 ~ "Oceania"
+      )
+    )%>% 
+    filter(area_code > 5000 & area_code <= 5501 & item == item_name & element == "Export Value") %>% 
+    ggplot(data=., aes(x=year, y=value, color=area, shape = continent)) +
+    geom_line() +
+    geom_point() +
+    scale_shape() +
+    labs(title=item_name, subtitle = ~element)
+  ggsave(filename = paste0("fig/continent/", dir_name, ".png"), plot = p)
+}
+
+for (item_name in item_list) {
+  dir_name <- str_remove(item_name, " \\(export/import\\)")
+  dir_name <- str_remove(dir_name, ", ")
+  p <- forestry_df %>% 
+    filter(area_code %% 100 != 0) %>% 
+    mutate(
+      continent = case_when(
+        area_code >= 5100 & area_code < 5200 ~ "Africa",
+        area_code >= 5200 & area_code < 5300 ~ "America",
+        area_code >= 5300 & area_code < 5400 ~ "Asia",
+        area_code >= 5400 & area_code < 5500 ~ "Europe",
+        area_code >= 5500 & area_code < 5600 ~ "Oceania"
+      )
+    )%>% 
+    filter(area_code > 5000 & area_code <= 5501 & item == item_name & element == "Export Value") %>% 
+    ggplot(data=., aes(x=year, y=value, color=area, shape = continent)) +
+    geom_line() +
+    geom_point() +
+    scale_shape() +
+    labs(title=item_name, subtitle = ~element)
+  ggsave(filename = paste0("fig/continent2/", dir_name, ".png"), plot = p)
+}
+
+trade_df %>% 
+  filter(reporter_country == "Japan" & partner_country == "Malaysia") %>% 
+  select(reporter_country, partner_country, year, item, element, value) %>% 
+  View()
+
+forestry_df %>% 
+  filter(year == 2020 & area_code > 5000 & element == "Export Value") %>% 
+  arrange(desc(area_code)) %>%
+  distinct(area, area_code) %>% 
+  View()
 # network

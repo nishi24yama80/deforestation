@@ -1,0 +1,219 @@
+---
+title: "Trade and Deforestation"
+author: "Tomoki Nishiyama"
+date: "2023-12-02"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, arrow, openxlsx, estimatr, modelsummary, fixest)
+```
+
+# Data
+```{r}
+un_forest_df <- read.csv("../data/raw/un_global_forest_resource_assess/FRA_Years_2023_12_02.csv")
+trade_df2 <- read_parquet("../data/dev/trade_gdp_dist.parquet")
+forest_df <- read_parquet("../data/dev/faostat_forestry_long.parquet")
+```
+
+# Background
+Prohibition of export of logs
+- Indonesia 1985
+- Sabah Malaysia 1993
+
+# Myanmar 2014
+
+```{r}
+item_list <- forest_df %>% 
+  filter(area == "Myanmar" & year %in% c(1975, 2000) & element == "Export Value" & item != "Forest products (export/import)") %>% 
+  arrange(desc(value)) %>% 
+  distinct(item) %>% 
+  select(item) %>% 
+  slice(1:10) %>% 
+  pull()
+```
+
+
+```{r}
+forest_df %>% 
+  filter(element == "Export Value" & area == "Myanmar" & item %in% item_list) %>% 
+  ggplot(data = ., aes(x=year, y=value, color=item)) +
+  geom_line() 
+```
+
+
+# Indonesia 1985
+```{r}
+country_list <- forest_df %>% 
+  filter(item == "Roundwood" & year == 1990 & element == "Export Value" & area_code < 4000) %>% 
+  arrange(desc(value)) %>% 
+  slice(1:10) %>% 
+  select(area) %>% 
+  pull()
+
+country_list2 <- forest_df %>% 
+  filter(item == "Roundwood" & year == 2020 & element == "Export Value" & area_code < 4000) %>% 
+  arrange(desc(value)) %>% 
+  slice(1:10) %>% 
+  select(area) %>% 
+  pull()
+```
+
+```{r}
+forest_df %>% 
+  filter((area %in% country_list) & element == "Export Value" & item == "Roundwood") %>% 
+  ggplot(data=., aes(x=year, y=value, color=area)) +
+  geom_line()
+```
+
+# Indonesia
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & element == "Export Value" & year == 1990 & !is.na(value)) %>% 
+  arrange(desc(value)) %>% 
+  select(area, value)
+```
+
+```{r}
+forest_df %>% 
+  distinct(item)
+```
+
+```{r}
+trade_df2 %>% 
+  filter(reporter_country == "Indonesia") %>% 
+  distinct(item)
+```
+
+$y_{i, j, t} = \beta d_{i,j} + \gamma_t + \lambda_i + \lambda_j + \epsilon_{i,j,t}$
+
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & area == "World") %>% 
+  ggplot(data = ., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facet = ~element, scales = "free_y")
+```
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & area == "Malaysia") %>% 
+  ggplot(data = ., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facet = ~element, scales = "free_y")
+```
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & area == "Indonesia") %>% 
+  ggplot(data = ., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facet = ~element, scales = "free_y")
+```
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & area == "Myanmar") %>% 
+  ggplot(data = ., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facet = ~element, scales = "free_y")
+```
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & year == 2010 & element == "Export Value" & area == "World")
+```
+
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & year == 2010 & element == "Export Value" & area_code < 4000) %>% 
+  mutate(prop = value / 13294357 * 100) %>% 
+  arrange(desc(value)) %>% 
+  slice(1:10) %>% 
+  select(area, value, prop)
+```
+
+
+```{r}
+country_list <- forest_df %>% 
+  filter(item == "Roundwood" & year ==2005 & element == "Export Value" & area_code < 4000) %>% 
+  arrange(desc(value)) %>% 
+  slice(1:4) %>% 
+  select(area) %>% 
+  pull()
+```
+
+```{r}
+forest_df %>% 
+  filter((area %in% country_list) & element == "Export Quantity" & item == "Roundwood") %>% 
+  ggplot(data=., aes(x=year, y=value, color=area)) +
+  geom_line()
+```
+
+
+```{r}
+item_list <- forest_df %>% 
+  filter(area == "Indonesia" & year %in% c(1975, 2000) & element == "Export Value" & item != "Forest products (export/import)") %>% 
+  arrange(desc(value)) %>% 
+  distinct(item) %>% 
+  select(item) %>% 
+  slice(1:20) %>% 
+  pull()
+```
+
+
+```{r}
+forest_df %>% 
+  filter(element == "Export Value" & area == "Indonesia" & item %in% item_list) %>% 
+  ggplot(data = ., aes(x=year, y=value, color=item)) +
+  geom_line() 
+```
+
+```{r}
+forest_df %>% 
+  filter(item == "Roundwood" & area == "Malaysia") %>% 
+  ggplot(data = ., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facet = ~element, scales = "free_y")
+```
+
+
+```{r}
+trade_df2 %>% 
+  filter(reporter_country == "World" & item == "Industrial roundwood, coniferous (export/import)") %>% 
+  group_by(across(all_of(c("year", "element")))) %>% 
+  summarise(value = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data=., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facets = ~element, scales = "free_y")
+```
+
+```{r}
+trade_df2 %>% 
+  filter(reporter_country == "Japan" & item == "Industrial roundwood, coniferous (export/import)") %>% 
+  group_by(across(all_of(c("year", "element")))) %>% 
+  summarise(value = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data=., aes(x=year, y=value)) +
+  geom_line() +
+  facet_wrap(facets = ~element, scales = "free_y")
+```
+
+
+```{r}
+un_forest_df %>% 
+  filter(name == "Japan") %>% 
+  arrange(year) %>% 
+  ggplot(data=., aes(x=year, y=X1a_forestArea)) +
+  geom_line()
+```
+
+```{r}
+un_forest_df %>% 
+  filter(name == "Indonesia") %>% 
+  arrange(year) %>% 
+  View()
+```
+

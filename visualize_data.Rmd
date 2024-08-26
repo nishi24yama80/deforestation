@@ -1,0 +1,28 @@
+---
+title: "Visualization of Forestry Data"
+author: "Tomoki Nishiyama"
+date: "2023-10-26"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, arrow, reshape2, ggnetwork, network)
+```
+
+# Data
+```{r}
+forestry_df <- read_parquet("../data/dev/faostat_forestry_trade_long2.parquet")
+trade_df <- read_parquet("../data/dev/faostat_forestry_trade_long.parquet")
+```
+
+# World Level
+```{r}
+forestry_df %>% 
+  filter(area == "World") %>% 
+  ggplot(data=., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  facet_wrap(facets=~element, ncol = 2, scales = "free")
+ggsave(file="../fig/world_item.png", width=20, height=20, dpi=300)
+```
+

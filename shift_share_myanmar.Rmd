@@ -1,0 +1,384 @@
+---
+title: "Shift Share Approach for Myanmar 2014"
+author: "Tomoki Nishiyama"
+date: "2023-12-25"
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, results = TRUE)
+pacman::p_load(tidyverse, arrow, broom, estimatr, modelsummary, fixest)
+```
+
+# Data
+```{r}
+trade_df <- read_parquet("../data/dev/trade_gdp_dist.parquet")
+forest_df <- read_parquet("../data/dev/faostat_forestry_long.parquet")
+```
+
+# Background
+- Prohibition of export of logs
+- The WTO reports that Myanmar's 2014 log export ban covered logs, as well as boule-cut logs, baulk-squared timber, and confiscated timber (https://www.wto.org/english/tratop_e/tpr_e/s405_e.pdf).
+- The WTO previously reported the name of the relevant legislation (Notification No. 26/2013) in 2014 (https://www.wto.org/english/tratop_e/tpr_e/s293_e.pdf)
+
+# Myanmar 2014
+```{r}
+item_list <- forest_df %>% 
+  filter(area == "Myanmar" & year %in% c(1975, 2000) & element == "Export Value" & item != "Forest products (export/import)") %>%
+  arrange(desc(value)) %>% 
+  distinct(item) %>% 
+  select(item) %>% 
+  slice(1:10) %>% 
+  pull()
+```
+
+
+```{r}
+forest_df %>% 
+  filter(area == "Myanmar"  & item %in% c("Roundwood", "Sawnwood", "Wood-based panels") & element %in% c("Export Value", "Export Quantity")) %>% 
+  mutate(element2 = case_when(
+    element == "Export Value" ~ "exp_val",
+    element == "Export Quantity" ~ "exp_quant"
+  )) %>% 
+  select(year, item, element2, value) %>% 
+  group_by(item) %>% 
+  pivot_wider(names_from = element2, values_from = value) %>% 
+  mutate(exp_price = exp_val / exp_quant) %>% 
+  pivot_longer(cols=c(-year, -item), names_to = "element", values_to = "value") %>% 
+  mutate(
+    element = case_when(
+      element == "exp_price" ~ "Export Price (Value / Quantity)",
+      element == "exp_val" ~ "Export Value",
+      element == "exp_quant" ~ "Export Quantity"
+    )
+  )%>% 
+  ggplot(data = ., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  labs(title="Change in Export of Myanmar Forestry Goods", x="Year", y="Value")  +
+  geom_vline(xintercept = 2014, alpha=0.3) +
+  facet_wrap(facets=~element, scales="free_y", ncol = 1)
+```
+
+# Myanmar 2014
+```{r}
+forest_df %>% 
+  filter(area == "Myanmar"  & item %in% c("Roundwood", "Sawnwood", "Wood-based panels") & element %in% c("Import Value", "Import Quantity")) %>% 
+  mutate(element2 = case_when(
+    element == "Import Value" ~ "imp_val",
+    element == "Import Quantity" ~ "imp_quant"
+  )) %>% 
+  select(year, item, element2, value) %>% 
+  group_by(item) %>% 
+  pivot_wider(names_from = element2, values_from = value) %>% 
+  mutate(imp_price = imp_val / imp_quant) %>% 
+  pivot_longer(cols=c(-year, -item), names_to = "element", values_to = "value") %>% 
+  mutate(
+    element = case_when(
+      element == "imp_price" ~ "Import Price (Value / Quantity)",
+      element == "imp_val" ~ "Import Value",
+      element == "imp_quant" ~ "Import Quantity"
+    )
+  )%>% 
+  ggplot(data = ., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  labs(title="Change in Import of Myanmar Forestry Goods", x="Year", y="Value")  +
+  geom_vline(xintercept = 2014, alpha=0.3) +
+  facet_wrap(facets=~element, scales="free_y", ncol = 1)
+```
+
+# Forestry Data of Myanmar
+```{r}
+forest_df %>% 
+  filter(area == "Myanmar" & item %in% c("Roundwood", "Sawnwood", "Wood-based panels")) %>% 
+  ggplot(data = ., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  labs(title="Export Value of Forestry Goods", x="Year", y="Value") +
+  facet_wrap(facets=~element, scales="free_y")+
+  geom_vline(xintercept = 2014, alpha=0.3) 
+```
+
+```{r}
+item_list <- trade_df %>% 
+  filter(reporter_country == "Myanmar" & element == "Export Value" & year == 2013) %>% 
+  group_by(item) %>% 
+  summarize(val_mean = mean(value, na.rm = TRUE)) %>% 
+  arrange(desc(val_mean)) %>% 
+  select(item) %>% 
+  slice(1:10) %>% 
+  pull()
+```
+
+```{r}
+item_list <- c("Industrial roundwood, non-coniferous tropical (export/import)", "Industrial roundwood, non-coniferous non-tropical (export/import)", "Industrial roundwood, coniferous (export/import)", "Sawnwood, non-coniferous all", "Sawnwood, coniferous")
+```
+
+```{r}
+country_list <- trade_df %>% 
+  filter(reporter_country == "Myanmar" & item == "Industrial roundwood, non-coniferous tropical (export/import)" & element == "Export Value" & year == 2013 & partner_country_code < 4000 & ! partner_country_code %in% c(252, 254)) %>% 
+  arrange(desc(value)) %>% 
+  select(partner_country) %>% 
+  slice(1:10) %>% 
+  pull()
+```
+
+# Forestry Data of China
+
+```{r}
+trade_df %>% 
+  filter(reporter_country == "Myanmar" & item %in% item_list & element == "Export Value" & partner_country %in% country_list) %>% 
+  ggplot(data=., aes(x=year, y=value, color=partner_country)) +
+  geom_line() +
+  facet_wrap(facets = ~item, scales="free_y", ncol = 2)+
+  geom_vline(xintercept = 2014, alpha=0.3) +
+  labs(title="Change in Export of Myanmar Forestry Goods by Importer Country", x="Year", y="Export Value") 
+```
+
+
+```{r}
+country_list <- trade_df %>% 
+  filter(reporter_country == "China" & item == "Industrial roundwood, non-coniferous tropical (export/import)" & element == "Import Value" & year %in% c(2013, 2015) & partner_country_code < 4000 & ! partner_country_code %in% c(252, 254)) %>% 
+  arrange(desc(value)) %>% 
+  select(partner_country) %>% 
+  slice(1:10) %>% 
+  pull()
+```
+
+# Forestry Data of China 2
+```{r}
+trade_df %>% 
+  filter(reporter_country == "China" & item %in% item_list & element == "Import Value" & partner_country %in% country_list) %>% 
+  ggplot(data=., aes(x=year, y=value, color=partner_country)) +
+  geom_line() +
+  facet_wrap(facets = ~item, scales="free_y", ncol = 2)+
+  geom_vline(xintercept = 2014, alpha=0.3) +
+  labs(title="Change in Chinese Import of Forestry Goods by Exporter Country", x="Year", y="Import Value") 
+```
+
+# Forestry Data of China 3
+```{r}
+forest_df %>% 
+  filter(area == "China" & item %in% c("Roundwood", "Sawnwood", "Wood-based panels")) %>% 
+  ggplot(data = ., aes(x=year, y=value, color=item)) +
+  geom_line() +
+  labs(title="Chinese Forestry Goods", x="Year", y="Value") +
+  geom_vline(xintercept = 2014, alpha=0.3) +
+  facet_wrap(facets=~element, scales="free_y")
+```
+
+
+```{r}
+item1 <- "Industrial roundwood, non-coniferous non-tropical (export/import)"
+item2 <- "Industrial roundwood, non-coniferous tropical (export/import)"
+```
+
+```{r}
+trade_df2 <- trade_df %>% 
+  filter(reporter_country_code < 5000 & partner_country_code < 5000 & ! reporter_country_code %in% c(252, 254) & ! partner_country_code %in% c(252, 254))
+```
+
+# Complementarity
+## Shift-Share 
+
+$y_{i,t} = \beta_0 + \beta_1 \text{Exposure}_{i,t} + \varepsilon_{i,t}$
+
+```{r}
+trade_ss_df <- trade_df2 %>% 
+  filter(year == 2014 & item == item2 & element == "Export Value") %>% 
+  group_by(reporter_country) %>% 
+  summarize(sum_exp = sum(value, na.rm = TRUE)) %>% 
+  select(reporter_country, sum_exp) %>% 
+  left_join(filter(trade_df2, year == 2014 & item == item2 & element == "Export Value"), by="reporter_country") %>% 
+  mutate(exp_share_2013 = value / sum_exp) %>% 
+  select(reporter_country, partner_country, year, exp_share_2013) 
+```
+
+
+```{r}
+m_exp_shift_df <- trade_df2 %>% 
+  filter(reporter_country == "Myanmar" & item == item2 & element == "Export Value") %>% 
+  group_by(year, partner_country) %>% 
+  summarize(exp_m_all = sum(value, na.rm = TRUE)) %>% 
+  arrange(partner_country, year) %>% 
+  group_by(partner_country) %>% 
+  mutate(exp_m_diff = exp_m_all - lag(exp_m_all)) %>% 
+  ungroup()
+```
+
+```{r}
+trade_ss_df2 <- m_exp_shift_df %>% 
+  filter(year == 2015) %>% 
+  select(partner_country, exp_m_diff) %>% 
+  right_join(trade_ss_df, by = "partner_country")
+```
+
+```{r}
+trade_ss_df3 <- trade_ss_df2 %>% 
+  mutate(ss_indiv = exp_share_2013 * exp_m_diff) %>% 
+  group_by(reporter_country) %>% 
+  summarize(ss = - sum(ss_indiv, na.rm = TRUE))
+```
+
+
+```{r}
+forest_df2 <- forest_df %>% 
+  filter(area_code < 5000 & ! area_code %in% c(252, 254))
+```
+
+
+
+```{r}
+trade_ss_df4 <- forest_df2 %>% 
+  filter(item %in% c("Industrial roundwood, non-coniferous tropical (export/import)") ) %>%
+  mutate(
+    element = case_when(
+      element == "Production" ~ "production",
+      element == "Import Quantity" ~ "imp_quant",
+      element == "Export Quantity" ~ "exp_quant",
+      element == "Import Value" ~ "imp_val",
+      element == "Export Value" ~ "exp_val"
+    )
+  ) %>% 
+  select(area, year, item, element, value) %>% 
+  group_by(item) %>% 
+  pivot_wider(names_from = element, values_from = value) %>% 
+  group_by(area) %>% 
+  mutate(
+    imp_quant_diff = imp_quant - lag(imp_quant),
+    exp_quant_diff = exp_quant - lag(exp_quant),
+    imp_val_diff = imp_val - lag(imp_val),
+    exp_val_diff = exp_val - lag(exp_val)) %>% 
+  right_join(trade_ss_df3, by=c("area" = "reporter_country"))
+```
+
+```{r}
+trade_ss_df4 <- trade_ss_df4 %>% 
+  mutate(ss2 = -ss)
+```
+
+# Distribution of Shift-Share (Exposure) Value
+```{r}
+trade_ss_df4 %>% 
+  filter(year == 2015) %>% 
+  ggplot(data = ., aes(x=ss2)) +
+  geom_histogram() +
+  labs(x = "Exposure Value", y = "Count", title = "Distribution of Exposure Value")
+```
+
+
+```{r}
+reg_results <- trade_ss_df4 %>%
+  filter(year > 2014) %>% 
+  group_by(year) %>%
+  do(tidy(lm(exp_val ~ ss2, data = .),conf.int=T, level=0.95)) %>%
+  ungroup()
+```
+
+# Effect on Export Value
+
+```{r}
+reg_results %>% 
+  filter(term == "ss2") %>% 
+  ggplot(., aes(x = factor(year), y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_point(position = position_dodge(width = 0.3), size = 3) +
+  geom_errorbar(width = 0.2, position = position_dodge(width = 0.3)) +
+  labs(x = "Year", y = "Coefficient Estimate") +
+  ggtitle("Regression Coefficients of Export Value on Exposure to Myanmar's Supply Shock") +
+  theme_minimal()
+```
+
+
+```{r}
+reg_results <- trade_ss_df4 %>%
+  filter(year > 2014) %>% 
+  group_by(year) %>%
+  do(tidy(lm(exp_quant ~ ss2, data = .),conf.int=T, level=0.95)) %>%
+  ungroup()
+```
+
+# Effect on Export Quantity
+
+```{r}
+reg_results %>% 
+  filter(term == "ss2") %>% 
+  ggplot(., aes(x = factor(year), y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_point(position = position_dodge(width = 0.3), size = 3) +
+  geom_errorbar(width = 0.2, position = position_dodge(width = 0.3)) +
+  labs(x = "Year", y = "Coefficient Estimate") +
+  ggtitle("Regression Coefficients of Export Quantity on Exposure to Myanmar's Supply Shock") +
+  theme_minimal()
+```
+
+
+```{r}
+reg_results <- trade_ss_df4 %>%
+  filter(year > 2014) %>% 
+  filter(exp_quant != 0) %>% 
+  mutate(exp_price = exp_val / exp_quant) %>% 
+  group_by(year) %>%
+  do(tidy(lm(exp_price ~ ss2, data = .),conf.int=T, level=0.95)) %>%
+  ungroup()
+```
+
+# Effect on Export Price
+
+```{r}
+reg_results %>% 
+  filter(term == "ss2") %>% 
+  ggplot(., aes(x = factor(year), y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_point(position = position_dodge(width = 0.3), size = 3) +
+  geom_errorbar(width = 0.2, position = position_dodge(width = 0.3)) +
+  labs(x = "Year", y = "Coefficient Estimate") +
+  ggtitle("Regression Coefficients of Export Price on Exposure to Myanmar's Supply Shock") +
+  theme_minimal()
+```
+
+# Appendix
+
+```{r}
+ss_df <- trade_df2 %>% 
+  distinct(partner_country)
+```
+
+```{r}
+# initial export value from Myanmar to i
+ss_df <- trade_df2 %>% 
+  filter(reporter_country == "Myanmar" & year == 2013 & item == item2 & element == "Export Value") %>% 
+  select(partner_country, exp_m_i_2013 = value) %>% 
+  right_join(., ss_df, by="partner_country")
+```
+
+
+```{r}
+# sum of initial exp val from all to i (sum of i's imp)
+ss_df <- trade_df2 %>% 
+  filter(year == 2013 & item == item2 & element == "Export Value") %>% 
+  group_by(partner_country) %>% 
+  summarize(sum_imp_2013 = sum(value, na.rm = TRUE)) %>% 
+  right_join(., ss_df, by="partner_country")
+```
+
+```{r}
+sum_exp_m_2014 <- 479293	
+sum_exp_m_2015 <- 57858
+```
+
+```{r}
+ss_df <- ss_df %>% 
+  mutate(
+    ss_2014 = exp_m_i_2013 / sum_imp_2013 * sum_exp_m_2014,
+    ss_2015 = exp_m_i_2013 / sum_imp_2013 * sum_exp_m_2015
+  ) %>% 
+  replace_na(list(ss_2014 = 0, ss_2015 = 0))
+```
+
+
+
+```{r}
+trade_df2 %>% 
+  filter(reporter_country == "Myanmar" & item == item2 & element == "Export Value") %>% 
+  group_by(year) %>% 
+  summarize(value = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = value)) +
+  geom_line()
+```
+

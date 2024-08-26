@@ -1,4 +1,4 @@
-pacman::p_load(tidyverse, arrow, broom, estimatr, modelsummary, fixest)
+pacman::p_load(tidyverse, arrow, broom, estimatr, modelsummary, fixest, skimr, rstatix)
 
 trade_df <- read_parquet("data/dev/trade_gdp_dist.parquet")
 forest_df <- read_parquet("data/dev/faostat_forestry_long.parquet")
@@ -8,7 +8,6 @@ gdp_df <- read.csv("data/raw/gdp.csv")
 trade_df <- trade_df %>% 
   filter(reporter_country_code < 5000 & partner_country_code < 5000 & ! reporter_country_code %in% c(252, 254) & ! partner_country_code %in% c(252, 254)) %>% 
   left_join(country_df, by = c("reporter_country" = "Country"))
-
 
 forest_df <- forest_df %>% 
   filter(area_code < 5000 & ! area_code %in% c(252, 254)) %>% 
@@ -29,6 +28,211 @@ forest_item_list <- forest_df %>%
   filter(year == 2018) %>% 
   distinct(item) %>% 
   pull()
+
+####calc####
+forest_df %>% 
+  filter(item %in% c("Industrial roundwood, coniferous", "Industrial roundwood, non-coniferous")) %>% 
+  filter(element == "Production") %>% 
+  filter(year > 2000) %>% 
+  filter(area == "Russian Federation") %>% 
+  ggplot(data = ., aes(x = year, y = value, color = item)) +
+  geom_line()
+
+####Descriptive Stat Figs####
+p <- forest_df %>%
+  filter(item %in% c("Industrial roundwood, coniferous", "Industrial roundwood, non-coniferous")) %>% 
+  mutate(item = case_when(
+    item == "Industrial roundwood, coniferous" ~ "Coniferous",
+    item == "Industrial roundwood, non-coniferous" ~ "Non-coniferous"
+  )) %>% 
+  filter(element == "Production") %>% 
+  select(area, year, item, value) %>% 
+  group_by(year, item) %>% 
+  summarize(total = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = total, color = item)) +
+  geom_line() +
+  theme_minimal() +
+  labs(x = "Year", y = "Total Quantity (m^3)")
+ggsave(filename = "fig/summary_stat/production.png",width = 10, height = 8, dpi = 150,  plot = p)
+
+p <- trade_df %>% 
+  filter(item %in% item_vec) %>% 
+  filter(element == "Export Quantity") %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "Coniferous",
+      item == item_vec[2] ~ "Non-coniferous Non-Tropical",
+      item == item_vec[3] ~ "Non-coniferous Tropical"
+    )
+  ) %>% 
+  group_by(item, year) %>% 
+  summarise(total = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = total, color = item)) +
+  geom_line() +
+  theme_minimal() +
+  labs(x = "Year", y = "Total Quantity (m^3)")
+ggsave(filename = "fig/summary_stat/exp_quant.png",width = 10, height = 8, dpi = 150,  plot = p)
+
+
+p <- trade_df %>% 
+  filter(item %in% item_vec) %>% 
+  filter(element == "Export Value") %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "Coniferous",
+      item == item_vec[2] ~ "Non-coniferous Non-Tropical",
+      item == item_vec[3] ~ "Non-coniferous Tropical"
+    )
+  ) %>% 
+  group_by(item, year) %>% 
+  summarise(total = sum(value, na.rm = TRUE)) %>% 
+  ggplot(data = ., aes(x = year, y = total, color = item)) +
+  geom_line() +
+  theme_minimal() +
+  labs(x = "Year", y = "Total Value (1000USD)")
+ggsave(filename = "fig/summary_stat/exp_value.png",width = 10, height = 8, dpi = 150,  plot = p)
+
+####Descriptive Statistics Table####
+
+  
+
+forest_df %>%
+  filter(year == 2018) %>%
+  filter(item %in% c("Industrial roundwood, coniferous", "Industrial roundwood, non-coniferous")) %>% 
+  mutate(item = case_when(
+    item == "Industrial roundwood, coniferous" ~ "coniferous",
+    item == "Industrial roundwood, non-coniferous" ~ "non_coniferous"
+  )) %>% 
+  filter(element == "Production") %>% 
+  select(area, item, value) %>% 
+  pivot_wider(names_from = item, values_from = value) %>% 
+  get_summary_stats(
+    coniferous, non_coniferous,
+    type = "common", show = c("n", "mean", "sd", "min", "median", "max")
+  ) %>% 
+  knitr::kable("latex")
+
+item_vec <- c("Industrial roundwood, coniferous (export/import)", "Industrial roundwood, non-coniferous non-tropical (export/import)", "Industrial roundwood, non-coniferous tropical (export/import)")
+a <- trade_df %>% 
+  filter(year == 2018) %>% 
+  filter(item %in% item_vec) %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "coniferous",
+      item == item_vec[2] ~ "non_conif_non_trop",
+      item == item_vec[3] ~ "non_conif_trop"
+    ),
+    element = case_when(
+      element == "Import Value" ~ "imp_val",
+      element == "Import Quantity" ~ "imp_quant",
+      element == "Export Value" ~ "exp_val",
+      element == "Export Quantity" ~ "exp_quant"
+    ),
+    element_item = paste0(element, "_", item)
+  ) %>% 
+  group_by(reporter_country, element_item) %>% 
+  summarize(total = sum(value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  select(reporter_country, element_item, total) %>% 
+  pivot_wider(names_from = element_item, values_from = total)
+colnames(a)
+
+trade_df %>% 
+  filter(year == 2018) %>% 
+  filter(item %in% item_vec) %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "coniferous",
+      item == item_vec[2] ~ "non_conif_non_trop",
+      item == item_vec[3] ~ "non_conif_trop"
+    ),
+    element = case_when(
+      element == "Import Value" ~ "imp_val",
+      element == "Import Quantity" ~ "imp_quant",
+      element == "Export Value" ~ "exp_val",
+      element == "Export Quantity" ~ "exp_quant"
+    ),
+    element_item = paste0(element, "_", item)
+  ) %>% 
+  group_by(reporter_country, element_item) %>% 
+  summarize(total = sum(value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  select(reporter_country, element_item, total) %>% 
+  pivot_wider(names_from = element_item, values_from = total) %>% 
+  get_summary_stats(
+    colnames(a)[2:13],
+    type = "common", show = c("n", "mean", "sd", "min", "median", "max")
+  ) %>% 
+  knitr::kable("latex")
+
+trade_df %>% 
+  filter(year == 2018) %>% 
+  filter(item %in% item_vec) %>% 
+  filter(element %in% c("Export Quantity", "Import Quantity")) %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "coniferous",
+      item == item_vec[2] ~ "non_conif_non_trop",
+      item == item_vec[3] ~ "non_conif_trop"
+    ),
+    element = case_when(
+      element == "Import Value" ~ "imp_val",
+      element == "Import Quantity" ~ "imp_quant",
+      element == "Export Value" ~ "exp_val",
+      element == "Export Quantity" ~ "exp_quant"
+    ),
+    element_item = paste0(element, "_", item)
+  ) %>% 
+  group_by(reporter_country, element_item) %>% 
+  summarize(total = sum(value>0, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  select(reporter_country, element_item, total) %>% 
+  pivot_wider(names_from = element_item, values_from = total) %>% 
+  get_summary_stats(
+    colnames(a)[2:13],
+    type = "common", show = c("n", "mean", "sd", "min", "median", "max")
+  ) %>% 
+  knitr::kable("latex")
+
+
+
+trade_df %>% 
+  filter(year == 2018) %>% 
+  filter(item %in% item_vec) %>% 
+  mutate(
+    item = case_when(
+      item == item_vec[1] ~ "coniferous",
+      item == item_vec[2] ~ "non_conif_non_trop",
+      item == item_vec[3] ~ "non_conif_trop"
+    ),
+    element = case_when(
+      element == "Import Value" ~ "imp_val",
+      element == "Import Quantity" ~ "imp_quant",
+      element == "Export Value" ~ "exp_val",
+      element == "Export Quantity" ~ "exp_quant"
+    ),
+    element_item = paste0(element, "_", item)
+  )  %>% 
+  group_by(reporter_country, element, item) %>% 
+  summarize(total = sum(value, na.rm = TRUE)) %>% 
+  group_by(item) %>% 
+  pivot_wider(names_from = element, values_from = total) %>%
+  filter(imp_quant > 0) %>% 
+  filter(exp_quant > 0) %>% 
+  mutate(imp_price = imp_val / imp_quant)  %>% 
+  mutate(exp_price = exp_val / exp_quant) %>% 
+  ungroup() %>% 
+  select(reporter_country, item, imp_price, exp_price) %>% 
+  pivot_longer(cols=c(-reporter_country, -item), names_to = "element", values_to = "value") %>% 
+  mutate(item_element = paste0(element, "_", item)) %>% 
+  select(reporter_country, item_element, value) %>% 
+  pivot_wider(names_from = item_element, values_from = value) %>% 
+  get_summary_stats(
+    imp_price_coniferous, imp_price_non_conif_non_trop, imp_price_non_conif_trop,
+    exp_price_coniferous, exp_price_non_conif_non_trop, exp_price_non_conif_trop,
+    type = "common", show = c("n", "mean", "sd", "min", "median", "max")
+  ) %>% 
+  knitr::kable("latex")
 
 ####Num of Links####
 

@@ -35,26 +35,31 @@ item_vec <- c("Industrial roundwood, coniferous (export/import)", "Industrial ro
 
 ####gsynth####
 ####gsynth: production####
-shock_item_name <- item_vec[3]
+shock_item_name <- item_vec[1]
 outcome_item_name <- "Industrial roundwood, coniferous"
 outcome_element_name <- "Production"
-shock_year <- 2015
-#shock_leading_country <- "Russian Federation"
-#shock_leading_country2 <- "Russia"
-shock_leading_country <- "Myanmar"
-shock_leading_country2 <- "Myanmar"
+shock_year <- 2007
+shock_leading_country <- "Russian Federation"
+shock_leading_country2 <- "Russia"
+#shock_leading_country <- "Myanmar"
+#shock_leading_country2 <- "Myanmar"
 
 treatment_df <- trade_df %>% 
   distinct(partner_country)
 
 treatment_df <- trade_df %>% 
-  filter(reporter_country == shock_leading_country & year == shock_year & item == shock_item_name & element == "Export Quantity") %>% 
+  filter(reporter_country == shock_leading_country & year == shock_year - 1 & item == shock_item_name & element == "Export Quantity") %>% 
   mutate(m_dest = if_else(value > 0, 1, 0)) %>% 
   select(partner_country, m_dest, value) %>% 
   right_join(treatment_df, by = "partner_country") %>% 
   mutate(m_dest2 = if_else(is.na(m_dest), 0, m_dest)) %>% 
   select(partner_country, m_dest2)
 
+treatment_df %>% 
+  summarise(sum(m_dest2))
+
+53 * 1 * 1000000 
+0.25 * 100000000
 
 did_df3 <- forest_df %>% 
   filter(year > 1990) %>% 
